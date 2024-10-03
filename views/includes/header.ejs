@@ -11,6 +11,7 @@
   >
     <div class="wrapper">
       <!-- Preloader -->
+      <% if (title == "Dashboard") { %>
       <div
         class="preloader flex-column justify-content-center align-items-center"
       >
@@ -22,6 +23,7 @@
           width="60"
         />
       </div>
+      <% } %>
 
       <!-- Top-Navbar -->
       <nav class="main-header navbar navbar-expand navbar-dark">
@@ -89,7 +91,7 @@
                 <!-- Message Start -->
                 <div class="media">
                   <img
-                    src="dist/img/user1-128x128.jpg"
+                    src="img/user1-128x128.jpg"
                     alt="User Avatar"
                     class="img-size-50 mr-3 img-circle"
                   />
@@ -113,7 +115,7 @@
                 <!-- Message Start -->
                 <div class="media">
                   <img
-                    src="dist/img/user8-128x128.jpg"
+                    src="img/user8-128x128.jpg"
                     alt="User Avatar"
                     class="img-size-50 img-circle mr-3"
                   />
@@ -137,7 +139,7 @@
                 <!-- Message Start -->
                 <div class="media">
                   <img
-                    src="dist/img/user3-128x128.jpg"
+                    src="img/user3-128x128.jpg"
                     alt="User Avatar"
                     class="img-size-50 img-circle mr-3"
                   />
@@ -162,6 +164,7 @@
               >
             </div>
           </li>
+
           <!-- Notifications Dropdown Menu -->
           <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
@@ -193,11 +196,15 @@
               >
             </div>
           </li>
+
+          <!-- Full Screen -->
           <li class="nav-item">
             <a class="nav-link" data-widget="fullscreen" href="#" role="button">
               <i class="fas fa-expand-arrows-alt"></i>
             </a>
           </li>
+
+          <!-- right menu option -->
           <li class="nav-item">
             <a
               class="nav-link"
@@ -209,8 +216,61 @@
               <i class="fas fa-th-large"></i>
             </a>
           </li>
+
+          <!-- Menu Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown">
+              <i><%= userData.fullName %></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+              <a href="/profile" class="dropdown-item">
+                <i class="fas fa-user"></i> Profile
+              </a>
+              <div class="dropdown-divider"></div>
+              <a
+                class="dropdown-item"
+                id="passwordChange"
+                data-toggle="modal"
+                data-target="#modal-default"
+              >
+                <i class="fas fa-key mr-2"></i> Password
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="/user_logout" class="dropdown-item">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </div>
+          </li>
         </ul>
       </nav>
+
+      <!-- Change Password Dialog -->
+<div class="modal fade" id="modal-default">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title">Change Password</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <form action="/" method="post" id="formPassword">
+              <div class="modal-body" style="display: flex; flex-direction: column; gap: 5px;">
+                  <label for="password">Password: </label>
+                  <input type="password" placeholder="Enter password" name="password" id="password">
+                  <label for="cpassword">Confirm Password: </label>
+                  <input type="text" placeholder="Enter confirm password" name="cpassword" id="cpassword">
+              </div>
+              <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <input type="submit" class="btn btn-primary" value="Change" name="save" />
+              </div>
+          </form>
+      </div>
+      <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+
     </div>
   </body>
 </html>

@@ -5,7 +5,13 @@ const { check, validationResult } = require('express-validator');
 
 // To display login page
 const loginPage = (req, res) => {
-    res.render("login_page", { errorMsg: [] });
+    const id = req.session.user;
+
+    if (!id) {
+        res.render("login_page", { errorMsg: [] });
+    } else {
+        res.redirect("/");
+    }
 };
 
 // To check user credentials
@@ -29,7 +35,8 @@ const loginUser = async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (isPasswordValid) {
-        return res.redirect("/dashboard");
+        req.session.user = { id: user.id };
+        return res.redirect("/");
     } else {
         errorMsg.push("Invalid email or password.");
         return res.render("login_page", { errorMsg });
@@ -73,7 +80,7 @@ const registerUser = async (req, res) => {
     });
 
     if (isUserCreated) {
-        res.redirect("/");
+        res.redirect("/login");
     } else {
         errorMsg.push("User registration failed.");
         return res.render("register_page", { errorMsg });
@@ -144,7 +151,7 @@ const changePassword = async (req, res) => {
     );
 
     if (isPasswordUpdated > 0) {
-        return res.redirect("/");
+        return res.redirect("/login");
     } else {
         errorMsg.push("User not found or password update failed.");
         return res.render("recover_password", { userId: id, errorMsg });

@@ -1,33 +1,93 @@
 <%- include("includes/header.ejs") %>
+  <%- include("includes/sidebar.ejs") %>
 
-      <%- include("includes/sidebar.ejs") %>
-
-      <!-- Content Wrapper. Contains page content -->
-      <div class="content-wrapper">
-        <div class="content-header">
-          <div class="container-fluid">
-            <div class="row mb-2">
-              <div class="col-sm-6">
-                <h1 class="m-0">Dashboard v2</h1>
-              </div>
-              <!-- /.col -->
-              <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                  <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item active">Dashboard v2</li>
-                </ol>
-              </div>
-              <!-- /.col -->
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Dashboard v2</h1>
             </div>
-            <!-- /.row -->
+            <!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard v2</li>
+              </ol>
+            </div>
+            <!-- /.col -->
           </div>
-          <!-- /.container-fluid -->
+          <!-- /.row -->
+
+          <!-- Main content -->
+          <section class="content">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex flex-row-reverse mb-3">
+                        <a href="adduser.php" class="btn btn-primary">Add</a>
+                      </div>
+                      <table id="userstable" class="table table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Number</th>
+                            <th>Gender</th>
+                            <th>Date of Birth</th>
+                            <th>Hobby</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% allData.forEach(data=> { %>
+                            <tr>
+                              <td>
+                                <%= data.fullName %>
+                              </td>
+                              <td>
+                                <%= data.email %>
+                              </td>
+                              <td>
+                                <%= data.number %>
+                              </td>
+                              <td>
+                                <%= data.gender %>
+                              </td>
+                              <td>
+                                <%= data.dob %>
+                              </td>
+                              <td>
+                                <%= data.hobby %>
+                              </td>
+                              <td>
+                                <a href="/user/<%= data.id %>" class="text-success"><i
+                                    class="fas fa-edit fa-lg mx-1"></i></a>
+                                <a href="/user/<%= data.id %>" class="text-success"><i class="fas fa-trash fa-lg mx-1" style="color: red"></i></a>
+                                    
+                              </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
+        <!-- /.container-fluid -->
       </div>
+    </div>
 
-      <!-- Control Sidebar -->
-      <aside class="control-sidebar control-sidebar-dark"></aside>
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark"></aside>
 
-      <%- include("includes/footer.ejs") %>
-  </body>
-</html>
+    <%- include("includes/footer.ejs") %>
+      </body>
+
+      </html>

@@ -4,7 +4,7 @@ const authController = require("../controllers/auth");
 const userController = require("../controllers/user");
 
 // Login routes
-router.get("/", authController.loginPage);
+router.get("/login", authController.loginPage);
 router.post("/login", authController.validateLogin, authController.loginUser);
 
 // Registration routes
@@ -20,7 +20,19 @@ router.get("/recover_password/:id", authController.recoverPassword);
 router.post("/recover_password/:id", authController.validatePasswordChange, authController.changePassword);
 
 // Dashboard route
-router.get("/dashboard", userController.dashboard);
+router.get("/", userController.dashboard);
+router.post("/", userController.validatePasswordChange, userController.dashboardChangePassword);
+
+// User route
 router.get("/users", userController.users);
+
+// Profile route
+router.get("/profile", userController.profile);
+router.post("/profile", userController.editProfile);
+
+// Logout route
+router.get("/user_logout", userController.logout);
+
+
 
 module.exports = router;

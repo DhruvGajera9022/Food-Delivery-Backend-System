@@ -17,6 +17,27 @@ const Users = sequelize.define("users", {
     password: {
         type: Sequelize.STRING,
     },
+    number: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    gender: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    dob: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    hobbies: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    image: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    }
+
 }, {
     timestamps: false,
     freezeTableName: true,
