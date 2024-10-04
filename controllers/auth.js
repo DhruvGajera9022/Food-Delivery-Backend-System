@@ -8,12 +8,11 @@ const loginPage = (req, res) => {
     const id = req.session.user;
 
     if (!id) {
-        res.render("login_page", { errorMsg: [] });
+        res.render("authentication/login_page", { errorMsg: [] });
     } else {
         res.redirect("/");
     }
 };
-
 // To check user credentials
 const loginUser = async (req, res) => {
     const errorMsg = [];
@@ -21,7 +20,7 @@ const loginUser = async (req, res) => {
 
     if (!errors.isEmpty()) {
         errors.array().forEach(err => errorMsg.push(err.msg));
-        return res.render("login_page", { errorMsg });
+        return res.render("authentication/login_page", { errorMsg });
     }
 
     let { email, password } = req.body;
@@ -29,7 +28,7 @@ const loginUser = async (req, res) => {
     const user = await Users.findOne({ where: { email } });
     if (!user) {
         errorMsg.push("Invalid email or password.");
-        return res.render("login_page", { errorMsg });
+        return res.render("authentication/login_page", { errorMsg });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -39,20 +38,20 @@ const loginUser = async (req, res) => {
         return res.redirect("/");
     } else {
         errorMsg.push("Invalid email or password.");
-        return res.render("login_page", { errorMsg });
+        return res.render("authentication/login_page", { errorMsg });
     }
 };
-
+// To validate login fields
 const validateLogin = [
     check('email', 'Email is required').isEmail().withMessage('Enter a valid email'),
     check('password', 'Password is required').notEmpty(),
 ];
 
+
 // To display register page
 const registerPage = (req, res) => {
-    res.render("register_page", { errorMsg: [] });
+    res.render("authentication/register_page", { errorMsg: [] });
 };
-
 // To create a new user
 const registerUser = async (req, res) => {
     const errorMsg = [];
@@ -60,7 +59,7 @@ const registerUser = async (req, res) => {
 
     if (!errors.isEmpty()) {
         errors.array().forEach(err => errorMsg.push(err.msg));
-        return res.render("register_page", { errorMsg });
+        return res.render("authentication/register_page", { errorMsg });
     }
 
     let { fullname, email, password } = req.body;
@@ -68,7 +67,7 @@ const registerUser = async (req, res) => {
     const existingUser = await Users.findOne({ where: { email } });
     if (existingUser) {
         errorMsg.push("User with this email already exists.");
-        return res.render("register_page", { errorMsg });
+        return res.render("authentication/register_page", { errorMsg });
     }
 
     const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
@@ -83,10 +82,10 @@ const registerUser = async (req, res) => {
         res.redirect("/login");
     } else {
         errorMsg.push("User registration failed.");
-        return res.render("register_page", { errorMsg });
+        return res.render("authentication/register_page", { errorMsg });
     }
 };
-
+// To validate register fields
 const validateRegistration = [
     check('fullname', 'Full name is required').notEmpty(),
     check('email', 'Email is required').isEmail().withMessage('Enter a valid email'),
@@ -94,11 +93,11 @@ const validateRegistration = [
     check('confirmpassword', 'Passwords do not match').custom((value, { req }) => value === req.body.password),
 ];
 
+
 // To display forgot-password page
 const forgotPassword = (req, res) => {
-    res.render("forgot_password", { errorMsg: [] });
+    res.render("authentication/forgot_password", { errorMsg: [] });
 };
-
 // To handle forgot-password
 const checkEmail = async (req, res) => {
     const errorMsg = [];
@@ -107,29 +106,29 @@ const checkEmail = async (req, res) => {
 
     if (!errors.isEmpty()) {
         errors.array().forEach(err => errorMsg.push(err.msg));
-        return res.render("forgot_password", { errorMsg });
+        return res.render("authentication/forgot_password", { errorMsg });
     }
 
     const user = await Users.findOne({ where: { email } });
 
     if (user) {
-        res.redirect(`/recover_password/${user.id}`);
+        res.redirect(`authentication/recover_password/${user.id}`);
     } else {
         errorMsg.push("No user found with that email");
-        return res.render("forgot_password", { errorMsg });
+        return res.render("authentication/forgot_password", { errorMsg });
     }
 };
-
+// To validate forgot-password fields
 const validateForgotPassword = [
     check('email', 'Email is required').isEmail().withMessage('Enter a valid email')
 ];
 
+
 // To display recover-password
 const recoverPassword = (req, res) => {
     const id = req.params.id;
-    res.render("recover_password", { userId: id, errorMsg: [] });
+    res.render("authentication/recover_password", { userId: id, errorMsg: [] });
 };
-
 // To change password
 const changePassword = async (req, res) => {
     const errorMsg = [];
@@ -140,7 +139,7 @@ const changePassword = async (req, res) => {
 
     if (!errors.isEmpty()) {
         errors.array().forEach(err => errorMsg.push(err.msg));
-        return res.render("recover_password", { userId: id, errorMsg });
+        return res.render("authentication/recover_password", { userId: id, errorMsg });
     }
 
     const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
@@ -151,17 +150,18 @@ const changePassword = async (req, res) => {
     );
 
     if (isPasswordUpdated > 0) {
-        return res.redirect("/login");
+        return res.redirect("authentication/login");
     } else {
         errorMsg.push("User not found or password update failed.");
-        return res.render("recover_password", { userId: id, errorMsg });
+        return res.render("authentication/recover_password", { userId: id, errorMsg });
     }
 };
-
+// To validate password fields
 const validatePasswordChange = [
     check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
     check('confirmpassword', 'Passwords do not match').custom((value, { req }) => value === req.body.password),
 ];
+
 
 module.exports = {
     loginPage,

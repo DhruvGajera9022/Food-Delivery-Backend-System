@@ -25,14 +25,18 @@ router.post("/", userController.validatePasswordChange, userController.dashboard
 
 // User route
 router.get("/users", userController.users);
+router.post("/users/delete/:id", userController.deleteUser);
+router.get("/user/:id?", userController.fetchUserData);
+
+// Add-Edit User route
+// router.get("/add_user", userController.displayAddUserPage);
+router.post("/add_user", userController.userValidationRules, userController.addUserPage);
 
 // Profile route
 router.get("/profile", userController.profile);
-router.post("/profile", userController.editProfile);
+router.post("/profile", userController.upload, userController.validateProfileUpdate, userController.editProfile);
 
 // Logout route
 router.get("/user_logout", userController.logout);
-
-
 
 module.exports = router;
