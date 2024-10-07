@@ -36,6 +36,10 @@ const Users = sequelize.define("users", {
     image: {
         type: Sequelize.STRING,
         allowNull: true,
+    },
+    role: {
+        type: Sequelize.STRING,
+        allowNull: true,
     }
 
 }, {

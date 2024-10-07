@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const fs = require('fs');
 const Users = require("../models/user");
+const Role = require("../models/role");
 const { check, body, validationResult } = require('express-validator');
 require("dotenv").config();
 const multer = require("multer");
@@ -20,6 +21,7 @@ const upload = multer({
 }).single("image"); // Single file upload for image
 
 
+
 // To format date-of-birth
 function formatDate(dateString) {
     if (!dateString) return '';
@@ -27,6 +29,7 @@ function formatDate(dateString) {
     const [year, month, day] = dateString.split('-');
     return `${day}/${month}/${year}`;
 }
+
 
 
 // To display dashboard
@@ -37,7 +40,7 @@ const dashboard = async (req, res) => {
     if (id) {
         res.render("dashboard/dashboard", { title: "Dashboard", userData: data });
     } else {
-        res.redirect("authentication/login");
+        res.redirect("/login");
     }
 }
 // To change password from dashboard
@@ -78,8 +81,9 @@ const validatePasswordChange = [
 ];
 
 
-//To display users
-const users = async (req, res) => {
+
+//To display all users
+const allUsersData = async (req, res) => {
     const id = req.session.user;
     let data = await Users.findOne({ where: id });
     let allData = await Users.findAll({});
@@ -94,61 +98,23 @@ const users = async (req, res) => {
     if (id) {
         res.render("users/users", { title: "Users", userData: data, allData });
     } else {
-        res.redirect("authentication/login");
+        res.redirect("/login");
     }
 }
-// To display add user page
-const displayAddUserPage = async (req, res) => {
-    const id = req.session.user;
-    let data = await Users.findOne({ where: id });
-
-    if (id) {
-        res.render("users/add_user", { title: "Add User", userData: data });
-    } else {
-        res.redirect("authentication/login");
-    }
-}
-// To add user
-const addUserPage = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { fullName, email, password, number, gender, dob, hobby } = req.body;
-
-    let hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
-
-
-    // Create user
-    const isUserAdded = await Users.create({
-        fullName: fullName,
-        email: email,
-        password: hashedPassword,
-        number: number,
-        gender: gender,
-        dob: dob,
-        hobbies: [hobby].join(", "),
-    });
-
-    if (isUserAdded) {
-        return res.redirect("/users");
-    } else {
-        return res.status(500).json({ message: 'User could not be added.' });
-    }
-};
-// To edit user
-const fetchUserData = async (req, res) => {
+// To render page according to add or edit request
+const displayUserFormPage = async (req, res) => {
     // Get logged-in user data from session
     const loggedInUser = req.session.user;
+    const role = await Role.findAll({});
+
 
     // Check if user is logged in
     if (!loggedInUser || !loggedInUser.id) {
-        return res.redirect("/authentication/login");
+        return res.redirect("/login");
     }
 
     // Fetch logged-in user data
-    let loggedInUserData = await Users.findOne({ where: { id: loggedInUser.id } });
+    let loggedInUserData = await Users.findOne({ where: loggedInUser.id });
     if (!loggedInUserData) {
         return res.status(404).send("Logged-in user not found.");
     }
@@ -164,7 +130,8 @@ const fetchUserData = async (req, res) => {
             res.render("users/add_user", {
                 title: "Edit User",
                 userData: loggedInUserData,
-                user: user
+                user: user,
+                role: role,
             });
         } else {
             return res.status(404).send("User not found.");
@@ -175,11 +142,52 @@ const fetchUserData = async (req, res) => {
             title: "Add User",
             userData: loggedInUserData,
             user: null,
+            role: role,
         });
     }
 }
+// To add-edit user
+const addOrEditUser = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
+    let { id, fullName, email, password, number, gender, dob, hobby, role } = req.body;
+    const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
 
+    if (id) {
+        // edit user
+        const isUserUpdated = await Users.update({
+            fullName: fullName,
+            email: email,
+            password: password,
+            number: number,
+            gender: gender,
+            dob: dob,
+            hobbies: [hobby].join(", "),
+            role: role,
+        }, { where: { id: id } });
+        if (isUserUpdated > 0) {
+            res.redirect("/users");
+        }
+    } else {
+        // add user
+        const isUserAdded = await Users.create({
+            fullName: fullName,
+            email: email,
+            password: hashedPassword,
+            number: number,
+            gender: gender,
+            dob: dob,
+            hobbies: [hobby].join(", "),
+            role: role,
+        });
+        if (isUserAdded) {
+            res.redirect("/users");
+        }
+    }
+};
 // To delete user
 const deleteUser = async (req, res) => {
     const id = req.params.id;
@@ -207,7 +215,7 @@ const deleteUser = async (req, res) => {
     }
     res.redirect("/users");
 }
-// To validate add user fields
+// To validate user fields
 const userValidationRules = [
     check('fullName')
         .trim()
@@ -242,6 +250,7 @@ const userValidationRules = [
         .isDate({ format: 'YYYY-MM-DD' })
         .withMessage('Please provide a valid date of birth.'),
 ];
+
 
 
 //To display profile
@@ -327,6 +336,7 @@ const validateProfileUpdate = [
 ];
 
 
+
 //To logout user
 const logout = async (req, res) => {
     req.session.destroy((err) => {
@@ -340,13 +350,14 @@ const logout = async (req, res) => {
 }
 
 
+
 module.exports = {
     dashboard,
 
-    users,
-    displayAddUserPage,
-    addUserPage,
-    fetchUserData,
+    allUsersData,
+
+    addOrEditUser,
+    displayUserFormPage,
     deleteUser,
     userValidationRules,
 

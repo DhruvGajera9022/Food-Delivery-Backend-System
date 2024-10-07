@@ -19,53 +19,31 @@
                   <div class="card">
                     <div class="card-body">
                       <div class="d-flex flex-row-reverse mb-3">
-                        <a href="/user" class="btn btn-primary">Add</a>
+                        <a href="/add_role" class="btn btn-primary">Add</a>
                       </div>
                       <div class="table-responsive-sm">
-                        <table id="userstable" class="table table-dark table-striped table-bordered table-hover">
+                        <table id="roletable" class="table table-dark table-striped table-bordered table-hover">
                           <thead>
                             <tr>
-                              <th>Image</th>
-                              <th>Full Name</th>
-                              <th>Email</th>
-                              <th>Number</th>
-                              <th>Gender</th>
-                              <th>Date of Birth</th>
-                              <th>Hobby</th>
-                              <th>Role</th>
+                              <th>Title</th>
+                              <th>Description</th>
                               <th>Action</th>
                             </tr>
                           </thead>
                           <tbody>
                             <% allData.forEach(data=> { %>
                               <tr>
-                                <td><img src="img/userImages/<%= data.image %>" height="40" width="40"></td>
                                 <td>
-                                  <%= data.fullName %>
+                                  <%= data.title %>
                                 </td>
                                 <td>
-                                  <%= data.email %>
+                                  <%= data.description %>
                                 </td>
                                 <td>
-                                  <%= data.number %>
-                                </td>
-                                <td>
-                                  <%= data.gender %>
-                                </td>
-                                <td>
-                                  <%= data.formattedDob %>
-                                </td>
-                                <td>
-                                  <%= data.hobbies %>
-                                </td>
-                                <td>
-                                  <%= data.role %>
-                                </td>
-                                <td>
-                                  <a href="/user/<%= data.id %>" class="text-success">
+                                  <a href="/add_role/<%= data.id %>" class="text-success">
                                     <i class="fas fa-edit fa-lg mx-1"></i>
                                   </a>
-                                  <form action="/user/delete/<%= data.id %>" method="POST" style="display: inline" onsubmit="return confirm('Are you sure?')">
+                                  <form action="/add_role/delete/<%= data.id %>" method="POST" style="display: inline" onsubmit="return confirm('Are you sure?')">
                                     <button type="submit" style="background: none; border: none; cursor: pointer">
                                       <i class="fas fa-trash fa-lg mx-1" style="color: red"></i>
                                     </button>
