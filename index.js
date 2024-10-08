@@ -1,6 +1,6 @@
 const express = require("express");
 require("dotenv").config();
-const router = require("./routers/auth");
+const router = require("./routers/router");
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
 

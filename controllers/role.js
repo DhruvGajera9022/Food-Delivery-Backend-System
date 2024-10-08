@@ -1,38 +1,23 @@
-const Users = require("../models/user");
-const Role = require("../models/role");
 const { check, validationResult } = require('express-validator');
-require("dotenv").config();
+
+const Role = require("../models/role");
+const sessionHelper = require("../helpers/session_helper");
 
 
 // To display role page
 const roles = async (req, res) => {
-    const id = req.session.user;
-    let data = await Users.findOne({ where: id });
+    const data = await sessionHelper.loggedInUserData(req);
     let allData = await Role.findAll({});
 
-    if (id) {
-        res.render("role/role", { title: "Role", userData: data, allData });
-    } else {
-        res.redirect("/login");
-    }
+    res.render("role/role", { title: "Role", userData: data, allData });
 }
+
 
 
 // To render page according to add or edit request
 const displayRolePage = async (req, res) => {
     // Get logged-in user data from session
-    const loggedInUser = req.session.user;
-
-    // Check if user is logged in
-    if (!loggedInUser || !loggedInUser.id) {
-        return res.redirect("/login");
-    }
-
-    // Fetch logged-in user data
-    let loggedInUserData = await Users.findOne({ where: loggedInUser.id });
-    if (!loggedInUserData) {
-        return res.status(404).send("Logged-in user not found.");
-    }
+    const data = await sessionHelper.loggedInUserData(req);
 
     // Operation on role
     const id = req.params.id;
@@ -43,17 +28,17 @@ const displayRolePage = async (req, res) => {
         if (role) {
             res.render("role/add_role", {
                 title: "Edit Role",
-                userData: loggedInUserData,
+                userData: data,
                 role: role
             });
         } else {
-            return res.status(404).send("User not found.");
+            return res.status(404).send("Role not found.");
         }
     } else {
         // Render the page for adding a new user
         res.render("role/add_role", {
             title: "Add Role",
-            userData: loggedInUserData,
+            userData: data,
             role: null,
         });
     }
@@ -90,9 +75,7 @@ const addOrEditRole = async (req, res) => {
 // To delete role
 const deleteRole = async (req, res) => {
     const id = req.params.id;
-
     await Role.destroy({ where: { id } });
-
     res.redirect("/role");
 }
 // To validate user fields
@@ -101,6 +84,7 @@ const roleValidationRules = [
         .trim()
         .isLength({ min: 1 }).withMessage('Title is required.'),
 ];
+
 
 
 module.exports = {

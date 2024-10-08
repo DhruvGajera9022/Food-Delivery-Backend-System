@@ -5,13 +5,10 @@ const { check, validationResult } = require('express-validator');
 
 // To display login page
 const loginPage = (req, res) => {
-    const id = req.session.user;
-
-    if (!id) {
-        res.render("authentication/login_page", { errorMsg: [] });
-    } else {
-        res.redirect("/");
-    }
+    res.render("authentication/login_page", {
+        errorMsg: [],
+        formData: {},
+    });
 };
 // To check user credentials
 const loginUser = async (req, res) => {
@@ -20,7 +17,10 @@ const loginUser = async (req, res) => {
 
     if (!errors.isEmpty()) {
         errors.array().forEach(err => errorMsg.push(err.msg));
-        return res.render("authentication/login_page", { errorMsg });
+        return res.render("authentication/login_page", {
+            errorMsg,
+            formData: req.body,
+        });
     }
 
     let { email, password } = req.body;
@@ -28,7 +28,10 @@ const loginUser = async (req, res) => {
     const user = await Users.findOne({ where: { email } });
     if (!user) {
         errorMsg.push("Invalid email or password.");
-        return res.render("authentication/login_page", { errorMsg });
+        return res.render("authentication/login_page", {
+            errorMsg,
+            formData: req.body,
+        });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -38,7 +41,10 @@ const loginUser = async (req, res) => {
         return res.redirect("/");
     } else {
         errorMsg.push("Invalid email or password.");
-        return res.render("authentication/login_page", { errorMsg });
+        return res.render("authentication/login_page", {
+            errorMsg,
+            formData: req.body,
+        });
     }
 };
 // To validate login fields
@@ -48,9 +54,13 @@ const validateLogin = [
 ];
 
 
+
 // To display register page
 const registerPage = (req, res) => {
-    res.render("authentication/register_page", { errorMsg: [] });
+    res.render("authentication/register_page", {
+        errorMsg: [],
+        formData: {},
+    });
 };
 // To create a new user
 const registerUser = async (req, res) => {
@@ -59,7 +69,10 @@ const registerUser = async (req, res) => {
 
     if (!errors.isEmpty()) {
         errors.array().forEach(err => errorMsg.push(err.msg));
-        return res.render("authentication/register_page", { errorMsg });
+        return res.render("authentication/register_page", {
+            errorMsg,
+            formData: req.body,
+        });
     }
 
     let { fullname, email, password } = req.body;
@@ -67,7 +80,10 @@ const registerUser = async (req, res) => {
     const existingUser = await Users.findOne({ where: { email } });
     if (existingUser) {
         errorMsg.push("User with this email already exists.");
-        return res.render("authentication/register_page", { errorMsg });
+        return res.render("authentication/register_page", {
+            errorMsg,
+            formData: req.body,
+        });
     }
 
     const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
@@ -82,7 +98,10 @@ const registerUser = async (req, res) => {
         res.redirect("/login");
     } else {
         errorMsg.push("User registration failed.");
-        return res.render("authentication/register_page", { errorMsg });
+        return res.render("authentication/register_page", {
+            errorMsg,
+            formData: req.body,
+        });
     }
 };
 // To validate register fields
@@ -92,6 +111,7 @@ const validateRegistration = [
     check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
     check('confirmpassword', 'Passwords do not match').custom((value, { req }) => value === req.body.password),
 ];
+
 
 
 // To display forgot-password page
@@ -112,7 +132,7 @@ const checkEmail = async (req, res) => {
     const user = await Users.findOne({ where: { email } });
 
     if (user) {
-        res.redirect(`authentication/recover_password/${user.id}`);
+        res.redirect(`/recover_password/${user.id}`);
     } else {
         errorMsg.push("No user found with that email");
         return res.render("authentication/forgot_password", { errorMsg });
@@ -122,6 +142,7 @@ const checkEmail = async (req, res) => {
 const validateForgotPassword = [
     check('email', 'Email is required').isEmail().withMessage('Enter a valid email')
 ];
+
 
 
 // To display recover-password
@@ -150,7 +171,7 @@ const changePassword = async (req, res) => {
     );
 
     if (isPasswordUpdated > 0) {
-        return res.redirect("authentication/login");
+        return res.redirect("/login");
     } else {
         errorMsg.push("User not found or password update failed.");
         return res.render("authentication/recover_password", { userId: id, errorMsg });
@@ -161,6 +182,7 @@ const validatePasswordChange = [
     check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
     check('confirmpassword', 'Passwords do not match').custom((value, { req }) => value === req.body.password),
 ];
+
 
 
 module.exports = {

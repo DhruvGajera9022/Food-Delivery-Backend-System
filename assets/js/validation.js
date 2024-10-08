@@ -5,6 +5,8 @@ $(document).ready(function () {
     let recoverPassForm = $("#recoverPassForm");
     let formAddUser = $("#formAddUser");
     let formAddRole = $("#formAddRole");
+    let formProfile = $("#formProfile");
+    let formPassword = $("#formPassword");
 
     loginForm.validate({
         rules: {
@@ -32,29 +34,39 @@ $(document).ready(function () {
         rules: {
             fullname: {
                 required: true,
+                minlength: 3
             },
             email: {
                 required: true,
             },
             password: {
                 required: true,
+                minlength: 6,
+                maxlength: 16,
             },
-            confirmpassword: {
+            cpassword: {
                 required: true,
+                minlength: 6,
+                maxlength: 16,
             },
         },
         messages: {
             fullname: {
                 required: "Name is required",
+                minlength: "Name must be at least 3 characters long"
             },
             email: {
                 required: "Email is required",
             },
             password: {
-                required: "Password is required",
+                required: "Password is require",
+                minlength: "Password must be at least 6 character long",
+                maxlength: "Maximum length is 16",
             },
-            confirmpassword: {
-                required: "Confirm-Password is required",
+            cpassword: {
+                required: "Confirm-Password is require",
+                minlength: "Confirm-Password must be at least 6 character long",
+                maxlength: "Maximum length is 16",
             },
         },
         errorPlacement: function (error, element) {
@@ -82,17 +94,25 @@ $(document).ready(function () {
         rules: {
             password: {
                 required: true,
+                minlength: 6,
+                maxlength: 16,
             },
-            confirmpassword: {
+            cpassword: {
                 required: true,
+                minlength: 6,
+                maxlength: 16,
             },
         },
         messages: {
             password: {
-                required: "Password is required",
+                required: "Password is require",
+                minlength: "Password must be at least 6 character long",
+                maxlength: "Maximum length is 16",
             },
-            confirmpassword: {
-                required: "Confirm-Password is required",
+            cpassword: {
+                required: "Confirm-Password is require",
+                minlength: "Confirm-Password must be at least 6 character long",
+                maxlength: "Maximum length is 16",
             },
         },
         errorPlacement: function (error, element) {
@@ -104,15 +124,20 @@ $(document).ready(function () {
         rules: {
             fullName: {
                 required: true,
+                minlength: 3,
             },
             email: {
                 required: true,
             },
             password: {
                 required: true,
+                minlength: 6,
+                maxlength: 16,
             },
             cpassword: {
                 required: true,
+                minlength: 6,
+                maxlength: 16,
             },
             role: {
                 required: true,
@@ -122,15 +147,20 @@ $(document).ready(function () {
 
             fullName: {
                 required: "Full Name is require",
+                minlength: "Full Name must be at least 3 characters long",
             },
             email: {
                 required: "Email is require",
             },
             password: {
                 required: "Password is require",
+                minlength: "Password must be at least 6 character long",
+                maxlength: "Maximum length is 16",
             },
             cpassword: {
                 required: "Confirm-Password is require",
+                minlength: "Confirm-Password must be at least 6 character long",
+                maxlength: "Maximum length is 16",
             },
             role: {
                 required: "Role is require",
@@ -158,16 +188,59 @@ $(document).ready(function () {
                 minlength: "Description must be at least 10 characters long"
             }
         },
-        errorElement: "span",
-        errorPlacement: function (error, element) {
-            error.addClass("invalid-feedback");
-            element.closest(".form-group").find(".error-message").append(error);
+    });
+
+    formProfile.validate({
+        rules: {
+            fullname: {
+                required: true,
+                minlength: 3,
+            },
+            email: {
+                required: true,
+            },
+            number: {
+                required: true,
+            }
         },
-        highlight: function (element, errorClass, validClass) {
-            $(element).addClass("is-invalid").removeClass("is-valid");
-        },
-        unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass("is-invalid").addClass("is-valid");
+        messages: {
+            fullname: {
+                required: "Full Name is required",
+                minlength: "Name must be at least 3 characters long"
+            },
+            email: {
+                required: "Email is required",
+            },
+            number: {
+                required: "Number is required",
+            }
         }
+    });
+
+    formPassword.validate({
+        rules: {
+            password: {
+                required: true,
+                minlength: 6,
+                maxlength: 16,
+            },
+            cpassword: {
+                required: true,
+                minlength: 6,
+                maxlength: 16,
+            },
+        },
+        messages: {
+            password: {
+                required: "Password is require",
+                minlength: "Password must be at least 6 character long",
+                maxlength: "Maximum length is 16",
+            },
+            cpassword: {
+                required: "Confirm-Password is require",
+                minlength: "Confirm-Password must be at least 6 character long",
+                maxlength: "Maximum length is 16",
+            },
+        },
     });
 });

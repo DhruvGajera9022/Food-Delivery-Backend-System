@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     $("#userstable").dataTable({
         order: [],
-        columnDefs: [{ orderable: false, targets: [0, 8] }]
+        columnDefs: [{ orderable: false, targets: [0, 7] }]
     });
 
     $("#roletable").dataTable({
