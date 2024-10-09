@@ -7,6 +7,7 @@ require("dotenv").config();
 const Users = require("../models/user");
 const sessionHelper = require("../helpers/session_helper");
 const dateHelper = require("../helpers/date_formator");
+const roleHelper = require("../helpers/fetch_role");
 
 
 
@@ -15,19 +16,21 @@ const allUsersData = async (req, res) => {
     const data = await sessionHelper.loggedInUserData(req);
     let allData = await Users.findAll({});
 
-    allData = allData.map(user => {
+    allData = await Promise.all(allData.map(async (user) => {
+        const roleTitle = await roleHelper.fetchRole(user.role);
         return {
             ...user.dataValues,
-            formattedDob: dateHelper.formatDate(user.dob)
+            formattedDob: dateHelper.formatDate(user.dob),
+            roleTitle: roleTitle,
         };
-    });
+    }));
+
     res.render("users/users", { title: "Users", userData: data, allData });
-}
+};
 // To render page according to add or edit request
 const displayUserFormPage = async (req, res) => {
     // Get logged-in user data from session
     const data = await sessionHelper.loggedInUserData(req);
-
 
     // Operation on user
     const id = req.params.id;

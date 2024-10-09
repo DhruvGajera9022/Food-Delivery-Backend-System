@@ -164,11 +164,11 @@
                 if (data && data.length > 0) {
                   let roleOptions = '<option value="">Select Role</option>';
                   const userRole = '<%= (user && user.role) ? user.role : "" %>';
-
+                  debugger
                   data.forEach(function (role) {
                     if (role.title) {
-                      const selected = role.title === userRole ? 'selected' : '';
-                        roleOptions += `<option value="${role.title}" ${selected}>${role.title}</option>`;
+                      const selected = `${role.id}` === userRole ? 'selected' : '';
+                        roleOptions += `<option value="${role.id}" ${selected}>${role.title}</option>`;
                     }
                   });
 

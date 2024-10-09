@@ -26,7 +26,7 @@ const reverseAuthenticate = (req, res, next) => {
 const isAdmin = async (req, res, next) => {
     const data = await sessionHelper.loggedInUserData(req);
 
-    if (data.role == "User") {
+    if (data.role == "3") {
         res.redirect("/");
     } else {
         next();
