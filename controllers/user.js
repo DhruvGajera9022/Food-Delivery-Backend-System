@@ -4,7 +4,6 @@ const fs = require('fs');
 const { check, validationResult } = require('express-validator');
 require("dotenv").config();
 
-const Role = require("../models/role");
 const Users = require("../models/user");
 const sessionHelper = require("../helpers/session_helper");
 const dateHelper = require("../helpers/date_formator");
@@ -28,7 +27,6 @@ const allUsersData = async (req, res) => {
 const displayUserFormPage = async (req, res) => {
     // Get logged-in user data from session
     const data = await sessionHelper.loggedInUserData(req);
-    const role = await Role.findAll({});
 
 
     // Operation on user
@@ -43,7 +41,6 @@ const displayUserFormPage = async (req, res) => {
                 title: "Edit User",
                 userData: data,
                 user: user,
-                role: role,
             });
         } else {
             return res.status(404).send("User not found.");
@@ -54,7 +51,6 @@ const displayUserFormPage = async (req, res) => {
             title: "Add User",
             userData: data,
             user: null,
-            role: role,
         });
     }
 }

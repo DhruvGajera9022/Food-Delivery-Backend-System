@@ -44,6 +44,7 @@ router.post("/user/delete/:id", userController.deleteUser);
 
 // Role route
 router.get("/role", Middleware.authenticate, Middleware.isAdmin, roleController.roles);
+router.get("/getRoles", Middleware.authenticate, Middleware.isAdmin, roleController.getRole);
 
 
 // Add-Edit-Delete Role route

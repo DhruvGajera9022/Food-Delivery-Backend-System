@@ -7,8 +7,7 @@ const sessionHelper = require("../helpers/session_helper");
 // To display role page
 const roles = async (req, res) => {
     const data = await sessionHelper.loggedInUserData(req);
-    let allData = await Role.findAll({});
-
+    let allData = await getlAllRoles();
     res.render("role/role", { title: "Role", userData: data, allData });
 }
 
@@ -87,6 +86,19 @@ const roleValidationRules = [
 
 
 
+// To display all roles in User form into dropdown
+const getRole = async (req, res) => {
+    const roles = await getlAllRoles();
+    res.json(roles);
+};
+
+// Fetch role
+const getlAllRoles = async () => {
+    return await Role.findAll({});
+}
+
+
+
 module.exports = {
     roles,
 
@@ -94,4 +106,6 @@ module.exports = {
     addOrEditRole,
     deleteRole,
     roleValidationRules,
+
+    getRole,
 };
