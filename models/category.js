@@ -1,24 +1,29 @@
 const { sequelize } = require("../config/config");
 const { Sequelize, DataTypes } = require("sequelize");
 
-const Role = sequelize.define("role", {
+const Category = sequelize.define("category", {
     id: {
         type: Sequelize.INTEGER,
+        primaryKey: true,
         allowNull: false,
         autoIncrement: true,
-        primaryKey: true,
     },
-    title: {
+    name: {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    description: {
-        type: Sequelize.STRING,
-        allowNull: true,
+    isActive: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
     },
+    image: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    }
+
 }, {
     timestamps: false,
     freezeTableName: true,
 });
 
-module.exports = Role
+module.exports = Category

@@ -5,7 +5,6 @@ const { check, validationResult } = require('express-validator');
 require("dotenv").config();
 
 const Users = require("../models/user");
-const sessionHelper = require("../helpers/session_helper");
 const dateHelper = require("../helpers/date_formator");
 const roleHelper = require("../helpers/fetch_role");
 
@@ -13,7 +12,6 @@ const roleHelper = require("../helpers/fetch_role");
 
 //To display all users
 const allUsersData = async (req, res) => {
-    const data = await sessionHelper.loggedInUserData(req);
     let allData = await Users.findAll({});
 
     allData = await Promise.all(allData.map(async (user) => {
@@ -25,13 +23,10 @@ const allUsersData = async (req, res) => {
         };
     }));
 
-    res.render("users/users", { title: "Users", userData: data, allData });
+    res.render("users/users", { title: "Users", allData });
 };
 // To render page according to add or edit request
 const displayUserFormPage = async (req, res) => {
-    // Get logged-in user data from session
-    const data = await sessionHelper.loggedInUserData(req);
-
     // Operation on user
     const id = req.params.id;
 
@@ -42,7 +37,6 @@ const displayUserFormPage = async (req, res) => {
         if (user) {
             res.render("users/add_user", {
                 title: "Edit User",
-                userData: data,
                 user: user,
             });
         } else {
@@ -52,7 +46,6 @@ const displayUserFormPage = async (req, res) => {
         // Render the page for adding a new user
         res.render("users/add_user", {
             title: "Add User",
-            userData: data,
             user: null,
         });
     }

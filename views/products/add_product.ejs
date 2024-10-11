@@ -1,0 +1,178 @@
+<%- include("../includes/header.ejs") %> <%- include("../includes/sidebar.ejs") %>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card card-primary">
+                                                <% if(product){ %>
+                                                    <div class="card-header bg-success">
+                                                        <h3 class="text-light">Edit Product</h3>
+                                                    </div>
+                                                    <% }else{ %>
+                                                        <div class="card-header bg-primary">
+                                                            <h3 class="text-light">Add Product</h3>
+                                                        </div>
+                                                        <% } %>
+                                                            <form action="/add_product" method="post"
+                                                                enctype="multipart/form-data" id="formAddProduct">
+                                                                <div class="card-body">
+                                                                    <input type="hidden" name="id"
+                                                                        value="<%= product ? product.id : '' %>" />
+
+                                                                    <!-- Product Name -->
+                                                                    <div class="form-group row">
+                                                                        <label for="name"
+                                                                            class="col-sm-2 col-form-label">Product
+                                                                            Name <span class="text-danger">*</span>
+                                                                        </label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control"
+                                                                                id="name" name="name"
+                                                                                placeholder="Enter Product Name"
+                                                                                value="<%= product ? product.name : '' %>" />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Price -->
+                                                                    <div class="form-group row">
+                                                                        <label for="price"
+                                                                            class="col-sm-2 col-form-label">Price
+                                                                            <span class="text-danger">*</span>
+                                                                        </label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="number" class="form-control"
+                                                                                id="price" name="price"
+                                                                                placeholder="00.0"
+                                                                                value="<%= product ? product.price : '' %>" />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Description -->
+                                                                    <div class="form-group row">
+                                                                        <label for="price"
+                                                                            class="col-sm-2 col-form-label">Description
+                                                                        </label>
+                                                                        <div class="col-sm-10">
+                                                                            <textarea name="description"
+                                                                                id="description" class="form-control"
+                                                                                placeholder="Enter Description"><%= product ? product.description : '' %></textarea>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Active -->
+                                                                    <div class="form-group row">
+                                                                        <label for=""
+                                                                            class="col-sm-2 col-form-label">Status</label>
+                                                                        <div class="col-sm-10">
+                                                                            <label for="active"><input type="checkbox"
+                                                                                    name="active" id="active" <% if(product && product.isActive == 1){ %> checked <% } %>>
+                                                                                Active</label>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Rating -->
+                                                                    <div class="form-group row">
+                                                                        <label for="rating"
+                                                                            class="col-sm-2 col-form-label">Rating
+                                                                        </label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="number" class="form-control"
+                                                                                id="rating" name="rating"
+                                                                                placeholder="0.0"
+                                                                                min="0"
+                                                                                max="100000"
+                                                                                step="0.01"
+                                                                                value="<%= product ? product.rating : '' %>" />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Category -->
+                                                                    <div class="form-group row">
+                                                                        <label for="category"
+                                                                            class="col-sm-2 col-form-label">Category
+                                                                            <span class="text-danger">*</span></label>
+                                                                        <div class="col-sm-10">
+                                                                            <select name="category" id="category"
+                                                                                class="form-control">
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Image -->
+                                                                    <div class="form-group row">
+                                                                        <label for="image"
+                                                                            class="col-sm-2 col-form-label">Image</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="file" name="image" id="image"
+                                                                                class="form-control">
+                                                                            <input type="hidden" name="image_old"
+                                                                                value="<%= product ? product.image : '' %>" />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Submit Button -->
+                                                                    <div class="card-footer">
+                                                                        <button type="submit" name="add"
+                                                                            class="btn btn-<% if(product){ %>success<% }else{ %>primary<% } %>">
+                                                                            <% if(product){ %> Edit <% }else{ %> Add <%
+                                                                                        } %>
+                                                                        </button>
+                                                                    </div>
+                                                            </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+        </div>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark"></aside>
+
+        <%- include("../includes/footer.ejs") %>
+
+            <script>
+                $(document).ready(function () {
+
+                    $.ajax({
+                        url: '/getCategory',
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data && data.length > 0) {
+                                let categoryOptions = '<option value="">Select Category</option>';
+                                const productCategory = '<%= (product && product.category_id) ? product.category_id : "" %>';
+                                debugger
+                                data.forEach(function (category) {
+                                    debugger
+                                    if (category.name) {
+                                        const selected = `${category.id}` === productCategory ? 'selected' : '';
+                                        categoryOptions += `<option value="${category.id}" ${selected}>${category.name}</option>`;
+                                    }
+                                });
+
+                                $('#category').html(categoryOptions);
+                            } else {
+                                $('#category').html('<option disabled>No category available</option>');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Failed to fetch categories:', error);
+                            $('#category').html('<option disabled>Failed to load category</option>');
+                        }
+                    });
+                });
+            </script>

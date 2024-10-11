@@ -7,6 +7,8 @@ $(document).ready(function () {
     let formAddRole = $("#formAddRole");
     let formProfile = $("#formProfile");
     let formPassword = $("#formPassword");
+    let formAddCategory = $("#formAddCategory");
+    let formAddProduct = $("#formAddProduct");
 
     loginForm.validate({
         rules: {
@@ -240,6 +242,48 @@ $(document).ready(function () {
                 required: "Confirm-Password is require",
                 minlength: "Confirm-Password must be at least 6 character long",
                 maxlength: "Maximum length is 16",
+            },
+        },
+    });
+
+    formAddCategory.validate({
+        rules: {
+            name: {
+                required: true,
+                minlength: 3,
+            },
+        },
+        messages: {
+            name: {
+                required: 'Category Name is required',
+                minlength: 'Category Name must be at least 3 characters long',
+            },
+        }
+    });
+
+    formAddProduct.validate({
+        rules: {
+            name: {
+                required: true,
+                minlength: 3,
+            },
+            price: {
+                required: true,
+            },
+            category: {
+                required: true,
+            },
+        },
+        messages: {
+            name: {
+                required: "Product Name is required",
+                minlength: "Product Name must be at least 3 characters long",
+            },
+            price: {
+                required: "Price is required",
+            },
+            category: {
+                required: "Category is required",
             },
         },
     });

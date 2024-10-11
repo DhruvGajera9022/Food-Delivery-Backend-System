@@ -1,23 +1,19 @@
 const { check, validationResult } = require('express-validator');
 
 const Role = require("../models/role");
-const sessionHelper = require("../helpers/session_helper");
+
 
 
 // To display role page
 const roles = async (req, res) => {
-    const data = await sessionHelper.loggedInUserData(req);
     let allData = await getlAllRoles();
-    res.render("role/role", { title: "Role", userData: data, allData });
+    res.render("role/role", { title: "Role", allData });
 }
 
 
 
 // To render page according to add or edit request
 const displayRolePage = async (req, res) => {
-    // Get logged-in user data from session
-    const data = await sessionHelper.loggedInUserData(req);
-
     // Operation on role
     const id = req.params.id;
 
@@ -27,7 +23,6 @@ const displayRolePage = async (req, res) => {
         if (role) {
             res.render("role/add_role", {
                 title: "Edit Role",
-                userData: data,
                 role: role
             });
         } else {
@@ -37,7 +32,6 @@ const displayRolePage = async (req, res) => {
         // Render the page for adding a new user
         res.render("role/add_role", {
             title: "Add Role",
-            userData: data,
             role: null,
         });
     }
@@ -77,7 +71,7 @@ const deleteRole = async (req, res) => {
     await Role.destroy({ where: { id } });
     res.redirect("/role");
 }
-// To validate user fields
+// To validate role fields
 const roleValidationRules = [
     check('title')
         .trim()
@@ -91,6 +85,7 @@ const getRole = async (req, res) => {
     const roles = await getlAllRoles();
     res.json(roles);
 };
+
 
 // Fetch role
 const getlAllRoles = async () => {

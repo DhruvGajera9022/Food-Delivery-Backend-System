@@ -1,11 +1,16 @@
 const express = require("express");
 const router = express.Router();
+
 const authController = require("../controllers/auth");
 const dashboardController = require("../controllers/dashboard");
 const userController = require("../controllers/user");
 const roleController = require("../controllers/role");
+const categoryController = require("../controllers/category");
+const productController = require("../controllers/products");
+
 const imageHelper = require("../helpers//store_image");
 const Middleware = require("../middlewares/auth_middleware");
+
 
 // Login routes
 router.get("/login", Middleware.reverseAuthenticate, authController.loginPage);
@@ -30,6 +35,8 @@ router.post("/recover_password/:id", authController.validatePasswordChange, auth
 // Dashboard route
 router.get("/", Middleware.authenticate, dashboardController.dashboard);
 router.post("/", dashboardController.validatePasswordChange, dashboardController.dashboardChangePassword);
+router.get("/getData", Middleware.authenticate, dashboardController.getLoggedInUserData);
+
 
 
 // Users route
@@ -53,13 +60,38 @@ router.post("/add_role", roleController.roleValidationRules, roleController.addO
 router.post("/add_role/delete/:id", roleController.deleteRole);
 
 
+// Category Route
+router.get("/category", Middleware.authenticate, Middleware.isAdmin, categoryController.categories);
+router.get("/getCategory", Middleware.authenticate, Middleware.isAdmin, categoryController.getCategory);
+
+
+// Add-Edit-Delete Category route
+router.get("/add_category/:id?", Middleware.authenticate, Middleware.isAdmin, categoryController.displayCategoryPage);
+router.post("/add_category", imageHelper.uploadCategoryImage, categoryController.categoryValidationRules, categoryController.addOrEditCategory);
+router.post("/add_category/delete/:id", categoryController.deleteCategory);
+
+
+// Product route
+router.get("/product", Middleware.authenticate, Middleware.isAdmin, productController.products);
+
+
+// Add-Edit-Delete Product route
+router.get("/add_product/:id?", Middleware.authenticate, Middleware.isAdmin, productController.displayProductPage);
+router.post("/add_product", imageHelper.uploadProductImages, productController.productValidationRules, productController.addOrEditProduct);
+router.post("/add_product/delete/:id?", productController.deleteProduct);
+
+
 // Profile route
 router.get("/profile", Middleware.authenticate, dashboardController.profile);
-router.post("/profile", imageHelper.upload, dashboardController.validateProfileUpdate, dashboardController.editProfile);
+router.post("/profile", imageHelper.uploadUserImage, dashboardController.validateProfileUpdate, dashboardController.editProfile);
 
 
 // Logout route
 router.get("/user_logout", dashboardController.logout);
+
+
+// Categories API
+router.get("/api/category", categoryController.categoriesAPI);
 
 
 module.exports = router;

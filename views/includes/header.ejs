@@ -50,7 +50,7 @@
         <!-- Menu Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown">
-            <%= userData.fullName %>
+            <span id="userName"></span>
             <i class="fa fa-caret-down">
             </i>
           </a>
@@ -99,6 +99,29 @@
       <!-- /.modal-dialog -->
 
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        const userPanelInfo = $('#userName');
+
+        $.ajax({
+          url: '/getData',
+          type: 'GET',
+          dataType: 'json',
+          success: function (data) {
+            if (data) {
+              userPanelInfo.html(data.fullName);
+            }
+          },
+          error: function (err) {
+            console.log('Error fetching user data:', err);
+          }
+        });
+      });
+    </script>
+
+
 </body>
 
 </html>

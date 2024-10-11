@@ -10,10 +10,17 @@ const dateHelper = require("../helpers/date_formator");
 
 
 
+// To get Logged in User data
+const getLoggedInUserData = async (req, res) => {
+    const data = await sessionHelper.loggedInUserData(req);
+    res.json(data);
+}
+
+
+
 // To display dashboard
 const dashboard = async (req, res) => {
-    const data = await sessionHelper.loggedInUserData(req);
-    res.render("dashboard/dashboard", { title: "Dashboard", userData: data });
+    res.render("dashboard/dashboard", { title: "Dashboard"});
 }
 // To change password from dashboard
 const dashboardChangePassword = async (req, res) => {
@@ -145,6 +152,8 @@ module.exports = {
 
     dashboardChangePassword,
     validatePasswordChange,
+
+    getLoggedInUserData,
 
     logout,
 }
