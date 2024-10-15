@@ -3,6 +3,8 @@ const Users = require("../models/user");
 require("dotenv").config();
 const { check, validationResult } = require('express-validator');
 
+
+
 // To display login page
 const loginPage = (req, res) => {
     res.render("authentication/login_page", {
@@ -34,10 +36,17 @@ const loginUser = async (req, res) => {
         });
     }
 
+    let userData = {
+        fullName: user.fullName,
+        image: user.image,
+        role: user.role
+    }
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (isPasswordValid) {
-        req.session.user = { id: user.id };
+        req.session.user = { id: user.id, fullName: user.fullName };
+        res.cookie('userData', userData);
         return res.redirect("/");
     } else {
         errorMsg.push("Invalid email or password.");

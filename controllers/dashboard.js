@@ -20,7 +20,7 @@ const getLoggedInUserData = async (req, res) => {
 
 // To display dashboard
 const dashboard = async (req, res) => {
-    res.render("dashboard/dashboard", { title: "Dashboard"});
+    res.render("dashboard/dashboard", { title: "Dashboard" });
 }
 // To change password from dashboard
 const dashboardChangePassword = async (req, res) => {
@@ -61,15 +61,16 @@ const validatePasswordChange = [
 
 
 
-//To display profile
+// To display profile
 const profile = async (req, res) => {
     const data = await sessionHelper.loggedInUserData(req);
 
+    // Check if dob exists before formatting it
     data.formattedDob = dateHelper.formatDate(data.dob);
     data.hobbies = data.hobbies ? data.hobbies.split(',') : [];
 
     res.render("profile/user_profile", { title: "Profile", userData: data });
-}
+};
 // To edit profile
 const editProfile = async (req, res) => {
     const errors = validationResult(req);
@@ -89,6 +90,12 @@ const editProfile = async (req, res) => {
         });
     }
 
+    let userData = {
+        fullName: fullname,
+        image: image,
+        role: user.role
+    }
+
     const rowsUpdated = await Users.update(
         {
             fullName: fullname,
@@ -105,6 +112,7 @@ const editProfile = async (req, res) => {
     );
 
     if (rowsUpdated > 0 || rowsUpdated[0] === 0) {
+        res.cookie('userData', userData);
         res.redirect("/profile");
     } else {
         return res.status(400).send('Profile update failed.');
@@ -129,6 +137,7 @@ const validateProfileUpdate = [
 
 
 
+
 //To logout user
 const logout = async (req, res) => {
     req.session.destroy((err) => {
@@ -139,6 +148,8 @@ const logout = async (req, res) => {
             res.redirect("/login");
         }
     });
+
+    res.clearCookie('userData');
 }
 
 

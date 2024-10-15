@@ -66,29 +66,44 @@
 </aside>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
+  function getCookie(name) {
+    let cookieArr = document.cookie.split(";");
+    for (let i = 0; i < cookieArr.length; i++) {
+      let cookiePair = cookieArr[i].split("=");
+      if (name === cookiePair[0].trim()) {
+        return decodeURIComponent(cookiePair[1]);
+      }
+    }
+    return null;
+  }
+
   $(document).ready(function () {
     const userPanelInfo = $('.user-panel .info a');
     const userImage = $('.user-panel .image img');
     const adminNavItems = $('.admin-only');
 
-    $.ajax({
-      url: '/getData',
-      type: 'GET',
-      dataType: 'json',
-      success: function (data) {
-        if (data) {
-          userPanelInfo.html(data.fullName);
-          userImage.attr('src', '/img/userImages/' + data.image);
+    // Get userData cookie
+    const userDataCookie = getCookie('userData');
 
-          if (data.role == '1') {
-            adminNavItems.show();
-          }
-        }
-      },
-      error: function (err) {
-        console.log('Error fetching user data:', err);
+    if (userDataCookie) {
+      const userData = JSON.parse(decodeURIComponent(userDataCookie.slice(2)));
+
+      const fullName = userData.fullName;
+      const image = userData.image;
+      const role = userData.role;
+
+      // Update UI with values
+      if (fullName) {
+        userPanelInfo.html(fullName);
       }
-    });
+      if (image) {
+        userImage.attr('src', '/img/userImages/' + image);
+      }
+      if (role === '1') {
+        adminNavItems.show();
+      }
+    }
   });
 </script>

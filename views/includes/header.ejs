@@ -102,26 +102,36 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+
+      function getCookie(name) {
+        let cookieArr = document.cookie.split(";");
+        for (let i = 0; i < cookieArr.length; i++) {
+          let cookiePair = cookieArr[i].split("=");
+          if (name === cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+          }
+        }
+        return null;
+      }
+
       $(document).ready(function () {
         const userPanelInfo = $('#userName');
 
-        $.ajax({
-          url: '/getData',
-          type: 'GET',
-          dataType: 'json',
-          success: function (data) {
-            if (data) {
-              userPanelInfo.html(data.fullName);
-            }
-          },
-          error: function (err) {
-            console.log('Error fetching user data:', err);
+        // Get userData cookie
+        const userDataCookie = getCookie('userData');
+
+        if (userDataCookie) {
+          const userData = JSON.parse(decodeURIComponent(userDataCookie.slice(2)));
+
+          const fullName = userData.fullName;
+
+          // Update UI with values
+          if (fullName) {
+            userPanelInfo.html(fullName);
           }
-        });
+        }
       });
     </script>
-
-
 </body>
 
 </html>

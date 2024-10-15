@@ -131,6 +131,8 @@ const getlAllCategory = async () => {
 const categoriesAPI = async (req, res) => {
     let categories = await getlAllCategory();
 
+    categories = categories.filter(category => category.isActive);
+
     categories = await Promise.all(categories.map(async (category) => {
         return {
             ...category.dataValues,
