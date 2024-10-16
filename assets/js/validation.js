@@ -291,14 +291,70 @@ $(document).ready(function () {
 
     formAddress.validate({
         rules: {
+            fullName: {
+                required: true,
+                minlength: 3,
+            },
+            number: {
+                required: true
+            },
+            fullName: {
+                required: true
+            },
+            no: {
+                required: true
+            },
+            street: {
+                required: true
+            },
+            city: {
+                required: true
+            },
+            state: {
+                required: true
+            },
+            country: {
+                required: true
+            },
             zipCode: {
                 maxlength: 6,
                 minlength: 6,
             },
-            messages:{
-                minlength:"Minimum 6 digits required",
-                maxlength:"Maximum 6 digits required",
-            }
+            type: {
+                required: true
+            },
+        },
+        messages: {
+            fullName: {
+                required: "Name is required",
+                minlength: "Name must be at least 3 characters long",
+            },
+            number: {
+                required: "Number is required"
+            },
+            no: {
+                required: "Flat, House no, Building, Company, Apartment is required"
+            },
+            street: {
+                required: "Area, Street, Sector, Village is required"
+            },
+            city: {
+                required: "Town/City is required"
+            },
+            state: {
+                required: "State is required"
+            },
+            country: {
+                required: "Country is required"
+            },
+            zipCode: {
+                minlength: "Minimum 6 digits required",
+                maxlength: "Maximum 6 digits required",
+            },
+            type: {
+                required: "Type is required"
+            },
+
         }
     })
 });

@@ -3,6 +3,7 @@ const router = express.Router();
 
 const authController = require("../controllers/auth");
 const dashboardController = require("../controllers/dashboard");
+const profileController = require("../controllers/profile");
 const userController = require("../controllers/user");
 const roleController = require("../controllers/role");
 const categoryController = require("../controllers/category");
@@ -82,13 +83,14 @@ router.post("/add_product/delete/:id?", productController.deleteProduct);
 
 
 // Profile route
-router.get("/profile", Middleware.authenticate, dashboardController.profile);
-router.post("/profile", imageHelper.uploadUserImage, dashboardController.validateProfileUpdate, dashboardController.editProfile);
+router.get("/profile", Middleware.authenticate, profileController.profile);
+router.post("/profile", imageHelper.uploadUserImage, profileController.validateProfileUpdate, profileController.editProfile);
 
 
 // Address route
-router.get("/getProfile", Middleware.authenticate, dashboardController.getAddress);
-router.post("/address", Middleware.authenticate, dashboardController.addAddress);
+router.get("/getProfile", Middleware.authenticate, profileController.getAddress);
+router.post("/address/:id?", Middleware.authenticate, profileController.addAddress);
+router.post("/address/delete/:id?", Middleware.authenticate, profileController.deleteAddress);
 
 
 // Logout route

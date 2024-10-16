@@ -1,14 +1,11 @@
 const bcrypt = require("bcrypt");
-const fs = require('fs');
 
-const { check, body, validationResult } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 require("dotenv").config();
 
 const Users = require("../models/user");
-const Address = require("../models/address");
 
 const sessionHelper = require("../helpers/session_helper");
-const dateHelper = require("../helpers/date_formator");
 
 
 
@@ -63,119 +60,6 @@ const validatePasswordChange = [
 
 
 
-// To display profile
-const profile = async (req, res) => {
-    const data = await sessionHelper.loggedInUserData(req);
-    const address = await Address.findOne({ where: { id: data.id } });
-
-    // Check if dob exists before formatting it
-    data.formattedDob = dateHelper.formatDate(data.dob);
-    data.hobbies = data.hobbies ? data.hobbies.split(',') : [];
-
-    res.render("profile/user_profile", { title: "Profile", userData: data, userAddress: address });
-};
-// To edit profile
-const editProfile = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    const user = req.session.user;
-    const { fullname, email, number, gender, dob, hobby, image_old } = req.body;
-    let image = req.file ? req.file.filename : image_old;
-
-    if (req.file && image_old) {
-        fs.unlink(`assets/img/userImages/${image_old}`, (err) => {
-            if (err) {
-                console.error("Failed to delete old image:", err);
-            }
-        });
-    }
-
-    let userData = {
-        fullName: fullname,
-        image: image,
-        role: user.role
-    }
-
-    const rowsUpdated = await Users.update(
-        {
-            fullName: fullname,
-            email: email,
-            number: number,
-            gender: gender,
-            dob: dob,
-            hobbies: [hobby].join(", "),
-            image: image,
-        },
-        {
-            where: { id: user.id },
-        }
-    );
-
-    if (rowsUpdated > 0 || rowsUpdated[0] === 0) {
-        res.cookie('userData', userData);
-        res.redirect("/profile");
-    } else {
-        return res.status(400).send('Profile update failed.');
-    }
-
-};
-// Validation Middleware
-const validateProfileUpdate = [
-    check('fullname')
-        .notEmpty()
-        .withMessage('Full name is required')
-        .isLength({ min: 3 })
-        .withMessage('Full name must be at least 3 characters long'),
-    check('email')
-        .isEmail()
-        .withMessage('Please provide a valid email address'),
-    check('number')
-        .optional()
-        .isMobilePhone()
-        .withMessage('Please provide a valid phone number'),
-];
-
-// To fetch all address
-const getAddress = async (req, res) => {
-    const user = req.session.user;
-
-    const allAddress = await Address.findAll({ where: { user_Id: user.id } });
-    res.json(allAddress);
-};
-
-// To add Address
-const addAddress = async (req, res) => {
-    const user = req.session.user;
-
-    let { no, street, city, state, zipCode, landMark, country, type, isDefault, fullName, number} = req.body;
-
-    isDefault = isDefault === "on";
-
-    const isAddressAdded = await Address.create({
-        no: no,
-        street: street,
-        city: city,
-        state: state,
-        zipCode: zipCode,
-        landMark: landMark,
-        country: country,
-        type: type,
-        isDefault: isDefault,
-        user_Id: user.id,
-        fullName: fullName,
-        number: number,
-    });
-
-    if (isAddressAdded) {
-        res.redirect("/profile");
-    }
-
-}
-
-
 //To logout user
 const logout = async (req, res) => {
     req.session.destroy((err) => {
@@ -194,13 +78,6 @@ const logout = async (req, res) => {
 
 module.exports = {
     dashboard,
-
-    profile,
-    editProfile,
-    validateProfileUpdate,
-
-    getAddress,
-    addAddress,
 
     dashboardChangePassword,
     validatePasswordChange,
