@@ -142,7 +142,7 @@ const validateProfileUpdate = [
 const getAddress = async (req, res) => {
     const user = req.session.user;
 
-    const allAddress = await Address.findOne({ where: { userId: user.id } });
+    const allAddress = await Address.findAll({ where: { user_Id: user.id } });
     res.json(allAddress);
 };
 
@@ -150,11 +150,12 @@ const getAddress = async (req, res) => {
 const addAddress = async (req, res) => {
     const user = req.session.user;
 
-    let { street, city, state, zipCode, landMark, country, type, isDefault } = req.body;
+    let { no, street, city, state, zipCode, landMark, country, type, isDefault, fullName, number} = req.body;
 
     isDefault = isDefault === "on";
 
     const isAddressAdded = await Address.create({
+        no: no,
         street: street,
         city: city,
         state: state,
@@ -163,7 +164,9 @@ const addAddress = async (req, res) => {
         country: country,
         type: type,
         isDefault: isDefault,
-        userId: user.id,
+        user_Id: user.id,
+        fullName: fullName,
+        number: number,
     });
 
     if (isAddressAdded) {

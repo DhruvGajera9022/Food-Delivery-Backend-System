@@ -1,4 +1,6 @@
-<%- include("../includes/header.ejs") %> <%- include("../includes/sidebar.ejs") %>
+<%- include("../includes/header.ejs") %>
+  <%- include("../includes/sidebar.ejs") %>
+    </style>
 
     <div class="wrapper">
       <div class="content-wrapper">
@@ -113,9 +115,7 @@
                         </div>
                       </div>
 
-
-
-
+                      <!-- Edit Profile Panel -->
                       <div class="tab-pane" id="settings">
 
                         <!-- Profile Form -->
@@ -234,6 +234,7 @@
                         </form>
                       </div>
 
+                      
                       <div class="tab-pane" id="address">
 
                         <div id="addressList" class="mt-4">
@@ -255,39 +256,47 @@
                               </div>
                               <div class="modal-body">
                                 <form method="post" id="formAddress" action="/address">
+
                                   <div class="form-group">
-                                    <label for="name" class="col-form-label">Full name (First and Last name):</label>
-                                    <input type="text" class="form-control" id="name" name="name">
+                                    <label for="fullName" class="col-form-label" style="font-weight: 400;">Full name
+                                      (First and Last
+                                      name):</label>
+                                    <input type="text" class="form-control" id="fullName" name="fullName">
                                   </div>
+
                                   <div class="form-group">
-                                    <label for="number" class="col-form-label">Mobile number</label>
+                                    <label for="number" class="col-form-label" style="font-weight: 400;">Mobile
+                                      number</label>
                                     <input type="number" class="form-control" id="number" name="number">
                                   </div>
+
                                   <div class="form-group">
-                                    <label for="pincode" class="col-form-label">Pincode</label>
-                                    <input type="number" class="form-control" id="pincode" name="pincode"
-                                      placeholder="6 digit [0-9] PIN code">
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="hno" class="col-form-label">Flat, House no, Building, Company,
+                                    <label for="no" class="col-form-label" style="font-weight: 400;">Flat, House no,
+                                      Building, Company,
                                       Apartment</label>
-                                    <input type="text" class="form-control" id="hno" name="hno">
+                                    <input type="text" class="form-control" id="no" name="no">
                                   </div>
+
                                   <div class="form-group">
-                                    <label for="street" class="col-form-label">Area, Street, Sector, Village</label>
-                                    <input type="text" class="form-control" id="street" name="street">
+                                    <label for="street" class="col-form-label" style="font-weight: 400;">Area, Street,
+                                      Sector, Village</label>
+                                    <textarea name="street" id="street" class="form-control"></textarea>
                                   </div>
+
                                   <div class="form-group">
-                                    <label for="Landmark" class="col-form-label">Landmark</label>
-                                    <input type="text" class="form-control" id="Landmark" name="Landmark">
+                                    <label for="landMark" class="col-form-label"
+                                      style="font-weight: 400;">Landmark</label>
+                                    <input type="text" class="form-control" id="landMark" name="landMark">
                                   </div>
+
                                   <div class="container">
                                     <div class="row">
                                       <div class="col-md-6">
                                         <div class="form-group">
-                                          <label for="city" class="col-form-label">Town/City</label>
+                                          <label for="city" class="col-form-label"
+                                            style="font-weight: 400;">Town/City</label>
                                           <select name="city" id="city" class="form-control">
-                                            <option value="">Select City</option>
+                                            <option value="">Choose City</option>
                                             <option value="Ahmedabad">Ahmedabad</option>
                                             <option value="Bengaluru">Bengaluru</option>
                                             <option value="Chennai">Chennai</option>
@@ -303,9 +312,10 @@
                                       </div>
                                       <div class="col-md-6">
                                         <div class="form-group">
-                                          <label for="state" class="col-form-label">State</label>
+                                          <label for="state" class="col-form-label"
+                                            style="font-weight: 400;">State</label>
                                           <select name="state" id="state" class="form-control">
-                                            <option value="">Select State</option>
+                                            <option value="">Choose State</option>
                                             <option value="Assam">Assam</option>
                                             <option value="Bihar">Bihar</option>
                                             <option value="Delhi">Delhi</option>
@@ -321,16 +331,64 @@
                                       </div>
                                     </div>
                                   </div>
-                                  <div class="form-group">
-                                    <input type="checkbox" name="isDefault" id="isDefault" class="mr-1">Make this my
-                                    default address</label>
+
+                                  <div class="container">
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label for="country" class="col-form-label"
+                                            style="font-weight: 400;">Country</label>
+                                          <select name="country" id="country" class="form-control">
+                                            <option value="">Choose Country</option>
+                                            <option value="India">India</option>
+                                            <option value="China">China</option>
+                                            <option value="U.S">U.S</option>
+                                            <option value="U.K">U.K</option>
+                                            <option value="U.A.E">U.A.E</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label for="zipCode" class="col-form-label" style="font-weight: 400;">Pincode</label>
+                                          <input type="number" class="form-control" id="zipCode" name="zipCode"
+                                            placeholder="6 digit [0-9] PIN code">
+                                        </div>
+                                      </div>
+                                    </div>
                                   </div>
+
+                                  <div class="container">
+                                    <div class="row">
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <label for="type" class="col-form-label"
+                                            style="font-weight: 400;">Type</label>
+                                          <select name="type" id="type" class="form-control">
+                                            <option value="">Choose Type</option>
+                                            <option value="Work">Work</option>
+                                            <option value="Home">Home</option>
+                                            <option value="Office">Office</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <div class="form-group">
+                                          <input type="checkbox" name="isDefault" id="isDefault"
+                                            class="mr-1 mt-5"><label for="isDefault" style="font-weight: 400;">Make this
+                                            my
+                                            default address</label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" data-target="submit">Submit</button>
                               </div>
                               </form>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                           </div>
                         </div>
@@ -346,41 +404,8 @@
     </div>
 
     <%- include("../includes/footer.ejs") %>
+    <%-  include(".")
+      
 
-      <script>
-        $(document).ready(function () {
-          $.ajax({
-            url: '/address',
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-              const addressOptions = $('#addressOptions');
-              addressOptions.empty();
-
-              if (data && Array.isArray(data) && data.length > 0) {
-                debugger
-                data.forEach(function (address) {
-                  const radioButton = `
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="address" id="address-${address.id}" value="${address.id}">
-              <label class="form-check-label" for="address-${address.id}">
-                ${address.hno}, ${address.street}, ${address.city}, ${address.state}, ${address.pincode}
-              </label>
-            </div>
-          `;
-                  addressOptions.append(radioButton);
-                });
-              } else {
-                addressOptions.html('<p>No addresses available</p>');
-              }
-            },
-            error: function (xhr, status, error) {
-              console.error('Failed to fetch addresses:', error);
-              $('#addressOptions').html('<p>Failed to load addresses</p>');
-            }
-          });
-        });
-
-      </script>
 
       </div>

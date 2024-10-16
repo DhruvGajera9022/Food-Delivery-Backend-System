@@ -151,6 +151,29 @@ const getAllProducts = async () => {
 }
 
 
+// API category
+const productsAPI = async (req, res) => {
+    let products = await getAllProducts();
+    let baseURL = `${process.env.URL}${process.env.PORT}`;
+
+    products = products.filter(products => products.isActive);
+
+    products = products.map((product) => {
+        return {
+            id: product.id,
+            product_category: product.category_id,
+            product_name: product.name,
+            product_price: product.price,
+            product_description: product.description,
+            product_rating: product.rating,
+            product_image: `${baseURL}/img/productImages/${product.image}`
+        }
+    });
+
+    res.json(products);
+}
+
+
 module.exports = {
     products,
 
@@ -158,4 +181,6 @@ module.exports = {
     addOrEditProduct,
     deleteProduct,
     productValidationRules,
+
+    productsAPI,
 }

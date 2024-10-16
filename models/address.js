@@ -8,6 +8,10 @@ const Address = sequelize.define("address", {
         primaryKey: true,
         allowNull: false,
     },
+    no: {
+        type: Sequelize.STRING,
+        after: 'id',
+    },
     street: {
         type: Sequelize.STRING,
     },
@@ -32,7 +36,15 @@ const Address = sequelize.define("address", {
     isDefault: {
         type: Sequelize.BOOLEAN,
     },
-    userId:{
+    user_Id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
+    fullName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    number: {
         type: Sequelize.INTEGER,
         allowNull: false,
     }

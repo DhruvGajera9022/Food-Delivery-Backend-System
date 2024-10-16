@@ -87,16 +87,17 @@ router.post("/profile", imageHelper.uploadUserImage, dashboardController.validat
 
 
 // Address route
-router.get("/address", dashboardController.getAddress);
-router.post("/address", dashboardController.addAddress);
+router.get("/getProfile", Middleware.authenticate, dashboardController.getAddress);
+router.post("/address", Middleware.authenticate, dashboardController.addAddress);
 
 
 // Logout route
 router.get("/user_logout", dashboardController.logout);
 
 
-// Categories API
+// APIs
 router.get("/api/category", categoryController.categoriesAPI);
+router.get("/api/products", productController.productsAPI);
 
 
 module.exports = router;
