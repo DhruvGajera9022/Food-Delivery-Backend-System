@@ -1,6 +1,7 @@
 const Category = require("../models/category");
 const { check, validationResult } = require('express-validator');
 const fs = require('fs');
+require("dotenv").config();
 
 
 
@@ -123,22 +124,26 @@ const getCategory = async (req, res) => {
 
 // Fetch category
 const getlAllCategory = async () => {
-    return await Category.findAll({});
+    return await Category.findAll({
+        order: [['id', 'DESC']]
+    });
 }
 
 
 // API category
 const categoriesAPI = async (req, res) => {
     let categories = await getlAllCategory();
+    let baseURL = `${process.env.URL}${process.env.PORT}`;
 
     categories = categories.filter(category => category.isActive);
 
-    categories = await Promise.all(categories.map(async (category) => {
+    categories = categories.map((category) => {
         return {
-            ...category.dataValues,
-            image: `/img/categoryImages/${category.image}`
-        };
-    }));
+            id: category.id,
+            menu_name: category.name,
+            menu_image: `${baseURL}/img/categoryImages/${category.image}`
+        }
+    });
 
     res.json(categories);
 }

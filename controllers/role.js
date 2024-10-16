@@ -89,7 +89,9 @@ const getRole = async (req, res) => {
 
 // Fetch role
 const getlAllRoles = async () => {
-    return await Role.findAll({});
+    return await Role.findAll({
+        order: [['id', 'DESC']]
+    });
 }
 
 

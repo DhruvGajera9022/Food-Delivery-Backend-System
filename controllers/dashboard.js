@@ -5,6 +5,8 @@ const { check, body, validationResult } = require('express-validator');
 require("dotenv").config();
 
 const Users = require("../models/user");
+const Address = require("../models/address");
+
 const sessionHelper = require("../helpers/session_helper");
 const dateHelper = require("../helpers/date_formator");
 
@@ -64,12 +66,13 @@ const validatePasswordChange = [
 // To display profile
 const profile = async (req, res) => {
     const data = await sessionHelper.loggedInUserData(req);
+    const address = await Address.findOne({ where: { id: data.id } });
 
     // Check if dob exists before formatting it
     data.formattedDob = dateHelper.formatDate(data.dob);
     data.hobbies = data.hobbies ? data.hobbies.split(',') : [];
 
-    res.render("profile/user_profile", { title: "Profile", userData: data });
+    res.render("profile/user_profile", { title: "Profile", userData: data, userAddress: address });
 };
 // To edit profile
 const editProfile = async (req, res) => {
@@ -135,7 +138,39 @@ const validateProfileUpdate = [
         .withMessage('Please provide a valid phone number'),
 ];
 
+// To fetch all address
+const getAddress = async (req, res) => {
+    const user = req.session.user;
 
+    const allAddress = await Address.findOne({ where: { userId: user.id } });
+    res.json(allAddress);
+};
+
+// To add Address
+const addAddress = async (req, res) => {
+    const user = req.session.user;
+
+    let { street, city, state, zipCode, landMark, country, type, isDefault } = req.body;
+
+    isDefault = isDefault === "on";
+
+    const isAddressAdded = await Address.create({
+        street: street,
+        city: city,
+        state: state,
+        zipCode: zipCode,
+        landMark: landMark,
+        country: country,
+        type: type,
+        isDefault: isDefault,
+        userId: user.id,
+    });
+
+    if (isAddressAdded) {
+        res.redirect("/profile");
+    }
+
+}
 
 
 //To logout user
@@ -160,6 +195,9 @@ module.exports = {
     profile,
     editProfile,
     validateProfileUpdate,
+
+    getAddress,
+    addAddress,
 
     dashboardChangePassword,
     validatePasswordChange,

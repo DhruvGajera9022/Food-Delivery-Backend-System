@@ -12,7 +12,9 @@ const roleHelper = require("../helpers/fetch_role");
 
 //To display all users
 const allUsersData = async (req, res) => {
-    let allData = await Users.findAll({});
+    let allData = await Users.findAll({
+        order: [['id', 'DESC']]
+    });
 
     allData = await Promise.all(allData.map(async (user) => {
         const roleTitle = await roleHelper.fetchRole(user.role);

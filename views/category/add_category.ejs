@@ -39,9 +39,11 @@
 
                                                 <!-- Active -->
                                                 <div class="form-group row">
-                                                    <label for="active" class="col-sm-2 col-form-label">Status</label>
+                                                    <label for="" class="col-sm-2 col-form-label">Status</label>
                                                     <div class="col-sm-10">
-                                                        <input type="checkbox" name="active" id="active" <% if(category && category.isActive == 1){ %> checked <% } %>> Active
+                                                        <label for="active">
+                                                            <input type="checkbox" name="active" id="active" <% if(category && category.isActive == 1){ %> checked <% } %>> Active
+                                                        </label>
                                                     </div>
                                                 </div>
 

@@ -145,7 +145,9 @@ const productValidationRules = [
 
 // Fetch products
 const getAllProducts = async () => {
-    return await Products.findAll({});
+    return await Products.findAll({
+        order: [['id', 'DESC']]
+    });
 }
 
 

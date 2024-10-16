@@ -9,6 +9,7 @@ $(document).ready(function () {
     let formPassword = $("#formPassword");
     let formAddCategory = $("#formAddCategory");
     let formAddProduct = $("#formAddProduct");
+    let formAddress = $("#formAddress");
 
     loginForm.validate({
         rules: {
@@ -287,4 +288,17 @@ $(document).ready(function () {
             },
         },
     });
+
+    formAddress.validate({
+        rules: {
+            zipCode: {
+                maxlength: 6,
+                minlength: 6,
+            },
+            messages:{
+                minlength:"Minimum 6 digits required",
+                maxlength:"Maximum 6 digits required",
+            }
+        }
+    })
 });

@@ -86,6 +86,11 @@ router.get("/profile", Middleware.authenticate, dashboardController.profile);
 router.post("/profile", imageHelper.uploadUserImage, dashboardController.validateProfileUpdate, dashboardController.editProfile);
 
 
+// Address route
+router.get("/address", dashboardController.getAddress);
+router.post("/address", dashboardController.addAddress);
+
+
 // Logout route
 router.get("/user_logout", dashboardController.logout);
 
