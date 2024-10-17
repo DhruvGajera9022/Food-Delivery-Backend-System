@@ -62,12 +62,12 @@ $(document).ready(function () {
                 required: "Email is required",
             },
             password: {
-                required: "Password is require",
+                required: "Password is required",
                 minlength: "Password must be at least 6 character long",
                 maxlength: "Maximum length is 16",
             },
             cpassword: {
-                required: "Confirm-Password is require",
+                required: "Confirm-Password is required",
                 minlength: "Confirm-Password must be at least 6 character long",
                 maxlength: "Maximum length is 16",
             },
@@ -108,12 +108,12 @@ $(document).ready(function () {
         },
         messages: {
             password: {
-                required: "Password is require",
+                required: "Password is required",
                 minlength: "Password must be at least 6 character long",
                 maxlength: "Maximum length is 16",
             },
             cpassword: {
-                required: "Confirm-Password is require",
+                required: "Confirm-Password is required",
                 minlength: "Confirm-Password must be at least 6 character long",
                 maxlength: "Maximum length is 16",
             },
@@ -149,24 +149,24 @@ $(document).ready(function () {
         messages: {
 
             fullName: {
-                required: "Full Name is require",
+                required: "Full Name is required",
                 minlength: "Full Name must be at least 3 characters long",
             },
             email: {
-                required: "Email is require",
+                required: "Email is required",
             },
             password: {
-                required: "Password is require",
+                required: "Password is required",
                 minlength: "Password must be at least 6 character long",
                 maxlength: "Maximum length is 16",
             },
             cpassword: {
-                required: "Confirm-Password is require",
+                required: "Confirm-Password is required",
                 minlength: "Confirm-Password must be at least 6 character long",
                 maxlength: "Maximum length is 16",
             },
             role: {
-                required: "Role is require",
+                required: "Role is required",
             },
         }
     });
@@ -235,12 +235,12 @@ $(document).ready(function () {
         },
         messages: {
             password: {
-                required: "Password is require",
+                required: "Password is required",
                 minlength: "Password must be at least 6 character long",
                 maxlength: "Maximum length is 16",
             },
             cpassword: {
-                required: "Confirm-Password is require",
+                required: "Confirm-Password is required",
                 minlength: "Confirm-Password must be at least 6 character long",
                 maxlength: "Maximum length is 16",
             },

@@ -19,7 +19,14 @@ const loginUser = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        errors.array().forEach(err => errorMsg.push(err.msg));
+        errors.array().forEach(err => {
+            errorMsg.push({
+                param: err.param,
+                msg: err.msg,
+                value: err.value,
+                path: err.path,
+            });
+        });
         return res.render("authentication/login_page", {
             errorMsg,
             formData: req.body,
@@ -30,7 +37,12 @@ const loginUser = async (req, res) => {
 
     const user = await Users.findOne({ where: { email } });
     if (!user) {
-        errorMsg.push("Invalid email or password.");
+        errorMsg.push({
+            param: "email",
+            msg: "Invalid email",
+            value: email,
+            path: 'email',
+        });
         return res.render("authentication/login_page", {
             errorMsg,
             formData: req.body,
@@ -50,7 +62,12 @@ const loginUser = async (req, res) => {
         res.cookie('userData', userData);
         return res.redirect("/");
     } else {
-        errorMsg.push("Invalid email or password.");
+        errorMsg.push({
+            param: "password",
+            msg: "Invalid password",
+            value: password,
+            path: 'password',
+        });
         return res.render("authentication/login_page", {
             errorMsg,
             formData: req.body,
@@ -59,7 +76,7 @@ const loginUser = async (req, res) => {
 };
 // To validate login fields
 const validateLogin = [
-    check('email', 'Email is required').isEmail().withMessage('Enter a valid email'),
+    check('email', 'Email is required').notEmpty(),
     check('password', 'Password is required').notEmpty(),
 ];
 
@@ -91,7 +108,14 @@ const registerUser = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        errors.array().forEach(err => errorMsg.push(err.msg));
+        errors.array().forEach(err => {
+            errorMsg.push({
+                param: err.param,
+                msg: err.msg,
+                value: err.value,
+                path: err.path,
+            });
+        });
         return res.render("authentication/register_page", {
             errorMsg,
             formData: req.body,
@@ -102,7 +126,12 @@ const registerUser = async (req, res) => {
 
     const existingUser = await Users.findOne({ where: { email } });
     if (existingUser) {
-        errorMsg.push("User with this email already exists.");
+        errorMsg.push({
+            param: "email",
+            msg: "User with this email already exists.",
+            value: email,
+            path: 'email',
+        });
         return res.render("authentication/register_page", {
             errorMsg,
             formData: req.body,
@@ -120,7 +149,12 @@ const registerUser = async (req, res) => {
     if (isUserCreated) {
         res.redirect("/login");
     } else {
-        errorMsg.push("User registration failed.");
+        errorMsg.push({
+            param: "registration",
+            msg: "User registration failed.",
+            value: null,
+            path: 'registration',
+        });
         return res.render("authentication/register_page", {
             errorMsg,
             formData: req.body,
@@ -134,6 +168,67 @@ const validateRegistration = [
     check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
     check('confirmpassword', 'Passwords do not match').custom((value, { req }) => value === req.body.password),
 ];
+
+
+// API for registration
+const registerAPI = async (req, res) => {
+    const errorMsg = [];
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        errors.array().forEach(err => {
+            errorMsg.push({
+                param: err.param,
+                msg: err.msg,
+                value: err.value,
+                path: err.path,
+            });
+        });
+    }
+
+    let { fullname, email, password } = req.body;
+    const existingUser = await Users.findOne({ where: { email } });
+
+    if (errors.isEmpty()) {
+        if (existingUser) {
+            errorMsg.push({
+                param: "email",
+                msg: "User with this email already exists.",
+                value: email,
+                path: 'email',
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
+
+        const isUserCreated = await Users.create({
+            fullName: fullname,
+            email: email,
+            password: hashedPassword,
+        });
+
+        if (isUserCreated) {
+            message: "Registration successfull"
+        } else {
+            errorMsg.push({
+                param: "registration",
+                msg: "User registration failed.",
+                value: null,
+                path: 'registration',
+            });
+        }
+    }
+
+    res.json({
+        status: !errors.isEmpty() ? false : true,
+        message: !errors.isEmpty() ? 'Registration failed' : 'Registration successfull',
+        data: {
+            fullName: fullname,
+            email: email,
+            password: password,
+        }
+    });
+}
 
 
 
@@ -218,6 +313,8 @@ module.exports = {
     registerPage,
     registerUser,
     validateRegistration,
+
+    registerAPI,
 
     forgotPassword,
     checkEmail,

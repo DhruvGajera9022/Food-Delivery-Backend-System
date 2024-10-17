@@ -10,6 +10,7 @@ const categoryController = require("../controllers/category");
 const productController = require("../controllers/products");
 
 const imageHelper = require("../helpers//store_image");
+
 const Middleware = require("../middlewares/auth_middleware");
 
 
@@ -102,6 +103,7 @@ router.get("/api/category", categoryController.categoriesAPI);
 router.get("/api/products", productController.productsAPI);
 router.get("/api/address", profileController.addressAPI);
 router.get("/api/login", authController.loginAPI);
+router.post("/api/register", authController.registerAPI);
 
 
 module.exports = router;
