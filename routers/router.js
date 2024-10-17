@@ -100,6 +100,7 @@ router.get("/user_logout", dashboardController.logout);
 // APIs
 router.get("/api/category", categoryController.categoriesAPI);
 router.get("/api/products", productController.productsAPI);
+router.get("/api/address", profileController.addressAPI);
 
 
 module.exports = router;

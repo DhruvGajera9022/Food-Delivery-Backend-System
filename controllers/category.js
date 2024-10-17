@@ -145,7 +145,10 @@ const categoriesAPI = async (req, res) => {
         }
     });
 
-    res.json(categories);
+    return res.json({
+        status: true,
+        data: categories,
+    });
 }
 
 

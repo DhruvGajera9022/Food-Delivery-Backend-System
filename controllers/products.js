@@ -153,7 +153,12 @@ const getAllProducts = async () => {
 
 // API category
 const productsAPI = async (req, res) => {
-    let products = await getAllProducts();
+    let products = await Products.findAll({
+        order: [
+            ['rating', 'DESC'],
+            ['id', 'DESC']
+        ]
+    });
     let baseURL = `${process.env.URL}${process.env.PORT}`;
 
     products = products.filter(products => products.isActive);
@@ -170,7 +175,10 @@ const productsAPI = async (req, res) => {
         }
     });
 
-    res.json(products);
+    return res.json({
+        status: true,
+        data: products
+    })
 }
 
 

@@ -94,7 +94,10 @@ const getAddress = async (req, res) => {
 
     const allAddress = await Address.findAll({
         where: { user_Id: user.id },
-        order: [['id', 'DESC']]
+        order: [
+            ['isDefault', 'DESC'],
+            ['id', 'DESC']
+        ]
     });
     res.json(allAddress);
 };
@@ -173,6 +176,23 @@ const deleteAddress = async (req, res) => {
 
 
 
+const addressAPI = async (req, res) => {
+    let addresses = await Address.findAll({
+        order: [
+            ['isDefault', 'DESC'],
+            ['id', 'DESC'],
+        ]
+    });
+
+    return res.json({
+        status: true,
+        data: addresses
+    });
+}
+
+
+
+
 module.exports = {
 
     profile,
@@ -182,4 +202,6 @@ module.exports = {
     getAddress,
     addAddress,
     deleteAddress,
+
+    addressAPI,
 }
