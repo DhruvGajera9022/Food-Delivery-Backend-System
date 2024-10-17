@@ -58,6 +58,14 @@
             <p>Products</p>
           </a>
         </li>
+
+        <!-- Invoice (Initially hidden) -->
+        <li class="nav-item admin-only" style="display:none;">
+          <a href="/invoice" class="nav-link <%= ["Invoice", "Add Invoice", "Edit Invoice"].includes(title) ? "active" : "" %>">
+            <i class="nav-icon fas fa-file-invoice-dollar"></i>
+            <p>Invoice</p>
+          </a>
+        </li>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

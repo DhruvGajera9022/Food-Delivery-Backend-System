@@ -155,9 +155,7 @@
                             if (data && data.length > 0) {
                                 let categoryOptions = '<option value="">Select Category</option>';
                                 const productCategory = '<%= (product && product.category_id) ? product.category_id : "" %>';
-                                debugger
                                 data.forEach(function (category) {
-                                    debugger
                                     if (category.name) {
                                         const selected = `${category.id}` === productCategory ? 'selected' : '';
                                         categoryOptions += `<option value="${category.id}" ${selected}>${category.name}</option>`;

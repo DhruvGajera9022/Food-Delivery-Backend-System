@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $("#userstable").dataTable({
         order: [],
         columnDefs: [{ orderable: false, targets: [0, 7] }]
@@ -17,6 +16,8 @@ $(document).ready(function () {
 
     $("#productstable").dataTable({
         order: [],
-        columnDefs: [{orderable: false, targets: [0, 6]}]
+        columnDefs: [{ orderable: false, targets: [0, 6] }]
     })
+
+    $("#inovicetable").dataTable({})
 });

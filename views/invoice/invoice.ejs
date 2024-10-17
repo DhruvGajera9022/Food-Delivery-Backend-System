@@ -1,0 +1,68 @@
+<%- include("../includes/header.ejs") %> <%- include("../includes/sidebar.ejs")
+%>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Invoice</h1>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="table-responsive-sm">
+                    <table
+                      id="inovicetable"
+                      class="table table-dark table-striped table-bordered table-hover"
+                    >
+                      <thead>
+                        <tr>
+                          <th>User Id</th>
+                          <th>Transaction Id</th>
+                          <th>Discount Id</th>
+                          <th>Order Date</th>
+                          <th>Total Amount</th>
+                          <th>Discount Amount</th>
+                          <th>Received Amount</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% allData.forEach(data=> { %>
+                        <tr>
+                          <td><%= data.user_id %></td>
+                          <td><%= data.transaction_id %></td>
+                          <td><%= data.discount_id %></td>
+                          <td><%= data.order_date %></td>
+                          <td><%= data.total_amount %></td>
+                          <td><%= data.discount_amount %></td>
+                          <td><%= data.received_amount %></td>
+                          <td><%= data.status %></td>
+                        </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+</div>
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark"></aside>
+
+<%- include("../includes/scripts.ejs") %>

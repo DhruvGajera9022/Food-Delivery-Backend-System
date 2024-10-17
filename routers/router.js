@@ -8,6 +8,7 @@ const userController = require("../controllers/user");
 const roleController = require("../controllers/role");
 const categoryController = require("../controllers/category");
 const productController = require("../controllers/products");
+const invoiceController = require("../controllers/invoice");
 
 const imageHelper = require("../helpers//store_image");
 
@@ -81,6 +82,11 @@ router.get("/product", Middleware.authenticate, Middleware.isAdmin, productContr
 router.get("/add_product/:id?", Middleware.authenticate, Middleware.isAdmin, productController.displayProductPage);
 router.post("/add_product", imageHelper.uploadProductImages, productController.productValidationRules, productController.addOrEditProduct);
 router.post("/add_product/delete/:id?", productController.deleteProduct);
+
+
+// Invoice route
+router.get("/invoice", Middleware.authenticate, Middleware.isAdmin, invoiceController.invoice);
+
 
 
 // Profile route
