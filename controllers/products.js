@@ -166,12 +166,12 @@ const productsAPI = async (req, res) => {
     products = products.map((product) => {
         return {
             id: product.id,
-            product_category: product.category_id,
-            product_name: product.name,
-            product_price: product.price,
-            product_description: product.description,
-            product_rating: product.rating,
-            product_image: `${baseURL}/img/productImages/${product.image}`
+            category_id: product.category_id,
+            name: product.name,
+            price: product.price,
+            description: product.description,
+            rating: product.rating,
+            image: `${baseURL}/img/productImages/${product.image}`
         }
     });
 

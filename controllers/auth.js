@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const Users = require("../models/user");
 require("dotenv").config();
 const { check, validationResult } = require('express-validator');
+const JWT = require("jsonwebtoken");
 
 
 
@@ -61,6 +62,19 @@ const validateLogin = [
     check('email', 'Email is required').isEmail().withMessage('Enter a valid email'),
     check('password', 'Password is required').notEmpty(),
 ];
+
+
+
+// API for login
+const loginAPI = async (req, res) => {
+    const token = JWT.sign({ id: loginUser.user }, process.env.TOKEN_SECRET);
+
+    return res.status(200).json({
+        status: true,
+        token: token,
+        message: ["Login successful"],
+    });
+};
 
 
 
@@ -198,6 +212,8 @@ module.exports = {
     loginPage,
     loginUser,
     validateLogin,
+
+    loginAPI,
 
     registerPage,
     registerUser,
