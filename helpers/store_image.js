@@ -47,9 +47,25 @@ const uploadProductImages = multer({
 
 
 
+// Image upload setup for product 
+let storageForSettingImage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "assets/img/settingImages/");
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname);
+    },
+});
+const uploadSettingImages = multer({
+    storage: storageForSettingImage,
+}).single("image"); // Single file upload for image
+
+
+
 
 module.exports = {
     uploadUserImage,
     uploadCategoryImage,
     uploadProductImages,
+    uploadSettingImages,
 }

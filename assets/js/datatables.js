@@ -22,7 +22,21 @@ $(document).ready(function () {
     $("#inovicetable").dataTable({});
 
 
-    $("#settingsDecription").summernote({
+    $("#privacy_policy").summernote({
+        placeholder: "Write your content here",
+        height: 70,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+    });
+
+    $("#term_condition").summernote({
         placeholder: "Write your content here",
         height: 70,
         toolbar: [

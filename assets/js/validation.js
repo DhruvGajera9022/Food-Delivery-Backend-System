@@ -10,6 +10,7 @@ $(document).ready(function () {
     let formAddCategory = $("#formAddCategory");
     let formAddProduct = $("#formAddProduct");
     let formAddress = $("#formAddress");
+    let addSettings = $("#addSettings");
 
     loginForm.validate({
         rules: {
@@ -355,6 +356,25 @@ $(document).ready(function () {
                 required: "Type is required"
             },
 
+        }
+    });
+
+    addSettings.validate({
+        rules: {
+            email: {
+                required: true,
+            },
+            phone: {
+                required: true,
+            },
+        },
+        messages: {
+            email: {
+                required: "Email is required",
+            },
+            phone: {
+                required: "Phone number is required",
+            },
         }
     })
 });

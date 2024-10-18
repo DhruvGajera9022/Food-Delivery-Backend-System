@@ -188,22 +188,22 @@ const registerAPI = async (req, res) => {
         return res.json({
             status: false,
             message: errorMsg,
-        })
+        });
     }
 
     let { fullname, email, password } = req.body;
+
     const existingUser = await Users.findOne({ where: { email } });
+    if (existingUser) {
+        errorMsg.push({
+            param: "email",
+            msg: "User with this email already exists.",
+            value: email,
+            path: 'email',
+        });
+    }
 
-    if (errors.isEmpty()) {
-        if (existingUser) {
-            errorMsg.push({
-                param: "email",
-                msg: "User with this email already exists.",
-                value: email,
-                path: 'email',
-            });
-        }
-
+    if (errorMsg.length == 0) {
         const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
 
         const isUserCreated = await Users.create({
@@ -214,24 +214,19 @@ const registerAPI = async (req, res) => {
 
         if (isUserCreated) {
             message: "Registration successfull"
-        } else {
+        } /*else {
             errorMsg.push({
                 param: "registration",
                 msg: "User registration failed.",
                 value: null,
                 path: 'registration',
             });
-        }
+        }*/
     }
 
-    res.json({
-        status: !errors.isEmpty() ? false : true,
-        message: !errors.isEmpty() ? 'Registration failed' : 'Registration successfull',
-        data: {
-            fullName: fullname,
-            email: email,
-            password: password,
-        }
+    return res.json({
+        status: errorMsg.length > 0 ? false : true,
+        message: errorMsg.length > 0 ? errorMsg : 'Registration successfull'
     });
 }
 

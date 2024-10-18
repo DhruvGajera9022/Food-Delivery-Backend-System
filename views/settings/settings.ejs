@@ -20,155 +20,133 @@
                                         <div class="card-body">
                                             <div class="table-responsive-sm">
                                                 <!-- Form to update Settings -->
-                                                <form action="/add_settings" method="POST">
+                                                <form action="/add_settings" method="POST" enctype="multipart/form-data"
+                                                    id="addSettings">
+
+                                                    <input type="hidden" name="id"
+                                                        value="<%= settingsData && settingsData.id ? settingsData.id :  '' %>">
+
+                                                    <!-- Email - Phone -->
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="email">Email</label>
+                                                                <label for="email">Email <span
+                                                                        class="text-danger">*</span></label>
                                                                 <input type="email" class="form-control" id="email"
-                                                                    name="email" placeholder="Enter email">
+                                                                    name="email" placeholder="Enter email"
+                                                                    value="<%= settingsData ? settingsData.email : '' %>">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="phone">Phone</label>
+                                                                <label for="phone">Phone <span
+                                                                        class="text-danger">*</span></label>
                                                                 <input type="text" class="form-control" id="phone"
-                                                                    name="phone" placeholder="Enter phone number">
+                                                                    name="phone" placeholder="Enter phone number"
+                                                                    value="<%= settingsData ? settingsData.phone : '' %>">
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="row">
+                                                    <!-- Facebook - Twitter -->
+                                                    <div class="row mt-4">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label for="facebook">Facebook</label>
                                                                 <input type="text" class="form-control" id="facebook"
-                                                                    name="facebook" placeholder="Enter Facebook link">
+                                                                    name="facebook" placeholder="Enter Facebook"
+                                                                    value="<%= settingsData ? settingsData.facebook : '' %>">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label for="twitter">Twitter</label>
                                                                 <input type="text" class="form-control" id="twitter"
-                                                                    name="twitter" placeholder="Enter Twitter link">
+                                                                    name="twitter" placeholder="Enter Twitter"
+                                                                    value="<%= settingsData ? settingsData.twitter : '' %>">
                                                             </div>
                                                         </div>
                                                     </div>
 
+                                                    <!-- LinkedIn - Instagram -->
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label for="linkedIn">LinkedIn</label>
                                                                 <input type="text" class="form-control" id="linkedIn"
-                                                                    name="linkedIn" placeholder="Enter LinkedIn link">
+                                                                    name="linkedIn" placeholder="Enter LinkedIn"
+                                                                    value="<%= settingsData ? settingsData.linkedIn : '' %>">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label for="instagram">Instagram</label>
                                                                 <input type="text" class="form-control" id="instagram"
-                                                                    name="instagram" placeholder="Enter Instagram link">
+                                                                    name="instagram" placeholder="Enter Instagram"
+                                                                    value="<%= settingsData ? settingsData.instagram : '' %>">
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="row">
+                                                    <!-- App store - Play store -->
+                                                    <div class="row mt-4">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="app_store">App Store Link</label>
+                                                                <label for="app_store">App Store</label>
                                                                 <input type="text" class="form-control" id="app_store"
-                                                                    name="app_store" placeholder="Enter App Store link">
+                                                                    name="app_store" placeholder="Enter App Store"
+                                                                    value="<%= settingsData ? settingsData.app_store : '' %>">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="play_store">Play Store Link</label>
+                                                                <label for="play_store">Play Store</label>
                                                                 <input type="text" class="form-control" id="play_store"
-                                                                    name="play_store"
-                                                                    placeholder="Enter Play Store link">
+                                                                    name="play_store" placeholder="Enter Play Store"
+                                                                    value="<%= settingsData ? settingsData.play_store : '' %>">
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="logo">Logo URL</label>
-                                                                <input type="text" class="form-control" id="logo"
-                                                                    name="logo" placeholder="Enter logo URL">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="privacy_policy">Privacy Policy Link</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="privacy_policy" name="privacy_policy"
-                                                                    placeholder="Enter Privacy Policy link">
-                                                            </div>
-                                                        </div>
+                                                    <!-- Logo -->
+                                                    <div class="form-group mt-4 ">
+                                                        <label for="image">Logo</label>
+                                                        <input type="file" name="image" id="image" class="form-control">
+                                                        <input type="hidden" name="image_old"
+                                                            value="<%= settingsData ? settingsData.logo : '' %>" />
                                                     </div>
 
-                                                    <div class="form-group">
-                                                        <label for="settingsDecription">Description</label>
-                                                        <textarea class="form-control" id="settingsDecription"
-                                                            name="decription" rows="3"
-                                                            placeholder="Enter description"></textarea>
+                                                    <!-- Description -->
+                                                    <div class="form-group mt-4">
+                                                        <label for="description">Description</label>
+                                                        <textarea class="form-control" id="description"
+                                                            name="description" rows="3"
+                                                            placeholder="Enter description"><%= settingsData ? settingsData.description: '' %></textarea>
                                                     </div>
 
-                                                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                                                    <!-- Privacy Policy -->
+                                                    <div class="form-group mt-4">
+                                                        <label for="privacy_policy">Privacy Policy</label>
+                                                        <textarea class="form-control" id="privacy_policy"
+                                                            name="privacy_policy" rows="3"
+                                                            placeholder="Enter Privacy Policy"> <%= settingsData ? settingsData.privacy_policy : '' %></textarea>
+                                                    </div>
+
+                                                    <!-- Terms & Conditions -->
+                                                    <div class="form-group mt-4">
+                                                        <label for="term_condition">Terms & Conditions</label>
+                                                        <textarea class="form-control" id="term_condition"
+                                                            name="term_condition" rows="3"
+                                                            placeholder="Enter Terms & Conditions"> <%= settingsData ? settingsData.term_condition : '' %></textarea>
+                                                    </div>
+
+                                                    <button type="submit" class="btn btn-primary" id="saveSetting">Save
+                                                        Settings
+                                                    </button>
                                                 </form>
 
                                                 <!-- Display Settings in Grid -->
-                                                    <div class="row mt-3">
-                                                        <% settings.forEach(function(setting) { %>
-                                                            <div class="col-md-4">
-                                                                <div class="card mb-3 shadow-sm">
-                                                                    <div class="card-body">
-                                                                        <p class="card-text">
-                                                                            <% if (setting.email) { %>
-                                                                                <strong>Email: </strong><%= setting.email %><br/>
-                                                                            <% } %>
-                                                                            <% if (setting.phone) { %>
-                                                                                <strong>Phone: </strong><%= setting.phone %><br/>
-                                                                            <% } %>
-                                                                        </p>
-                                                                        
-                                                                        <% if (setting.facebook || setting.twitter || setting.linkedIn || setting.instagram) { %>
-                                                                            <p class="card-text">
-                                                                                <strong>Social Media:</strong><br/>
-                                                                                <% if (setting.facebook) { %> Facebook: <%= setting.facebook %><br/> <% } %>
-                                                                                <% if (setting.twitter) { %> Twitter: <%= setting.twitter %><br/> <% } %>
-                                                                                <% if (setting.linkedIn) { %> LinkedIn: <%= setting.linkedIn %><br/> <% } %>
-                                                                                <% if (setting.instagram) { %> Instagram: <%= setting.instagram %><br/> <% } %>
-                                                                            </p>
-                                                                        <% } %>
-
-                                                                        <% if (setting.app_store || setting.play_store) { %>
-                                                                            <p class="card-text">
-                                                                                <strong>App Store Links:</strong><br/>
-                                                                                <% if (setting.app_store) { %> App Store: <%= setting.app_store %><br/> <% } %>
-                                                                                <% if (setting.play_store) { %> Play Store: <%= setting.play_store %><br/> <% } %>
-                                                                            </p>
-                                                                        <% } %>
-
-                                                                        <% if (setting.logo) { %>
-                                                                            <p class="card-text">
-                                                                                <strong>Logo:</strong><br/>
-                                                                                <img src="<%= setting.logo %>" alt="Logo" class="img-fluid"/>
-                                                                            </p>
-                                                                        <% } %>
-
-                                                                        <% if (setting.privacy_policy) { %>
-                                                                            <p class="card-text">
-                                                                                <strong>Privacy Policy:</strong><br/>
-                                                                                <a href="<%= setting.privacy_policy %>" target="_blank">View Policy</a>
-                                                                            </p>
-                                                                        <% } %>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        <% }) %>
-                                                    </div>
+                                                <div class="row mt-3" id="settings-grid"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -183,6 +161,8 @@
             <aside class="control-sidebar control-sidebar-dark"></aside>
 
             <%- include("../includes/footer.ejs") %>
-                </body>
 
-                </html>
+                <%- include("../../assets/js/JQuery/settings.js") %>
+                    </body>
+
+                    </html>

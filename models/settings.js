@@ -32,10 +32,13 @@ const Settings = sequelize.define("settings", {
     play_store: {
         type: Sequelize.STRING,
     },
-    decription: {
+    description: {
         type: Sequelize.STRING,
     },
     privacy_policy: {
+        type: Sequelize.STRING,
+    },
+    term_condition: {
         type: Sequelize.STRING,
     },
     logo: {

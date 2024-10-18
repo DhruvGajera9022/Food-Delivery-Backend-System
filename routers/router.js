@@ -90,11 +90,12 @@ router.get("/invoice", Middleware.authenticate, Middleware.isAdmin, invoiceContr
 
 
 // Settings
-router.get('/settings', Middleware.authenticate, Middleware.isAdmin, settingsController.settings);
+router.get("/getSettings", settingsController.getSettings);
+router.get('/settings/:id?', Middleware.authenticate, Middleware.isAdmin, settingsController.displaySettings);
 
 
 // Add-Edit-Delete Setting route
-router.post("/add_settings", settingsController.addSettings);
+router.post("/add_settings", imageHelper.uploadSettingImages, settingsController.addSettings);
 
 
 // Profile route
