@@ -9,6 +9,7 @@ const roleController = require("../controllers/role");
 const categoryController = require("../controllers/category");
 const productController = require("../controllers/products");
 const invoiceController = require("../controllers/invoice");
+const settingsController = require("../controllers/settings");
 
 const imageHelper = require("../helpers//store_image");
 
@@ -88,6 +89,13 @@ router.post("/add_product/delete/:id?", productController.deleteProduct);
 router.get("/invoice", Middleware.authenticate, Middleware.isAdmin, invoiceController.invoice);
 
 
+// Settings
+router.get('/settings', Middleware.authenticate, Middleware.isAdmin, settingsController.settings);
+
+
+// Add-Edit-Delete Setting route
+router.post("/add_settings", settingsController.addSettings);
+
 
 // Profile route
 router.get("/profile", Middleware.authenticate, profileController.profile);
@@ -109,7 +117,7 @@ router.get("/api/category", categoryController.categoriesAPI);
 router.get("/api/products", productController.productsAPI);
 router.get("/api/address", profileController.addressAPI);
 router.get("/api/login", authController.loginAPI);
-router.post("/api/register", authController.registerAPI);
+router.post("/api/register", authController.validateRegistration, authController.registerAPI);
 
 
 module.exports = router;

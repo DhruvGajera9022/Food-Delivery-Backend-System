@@ -1,0 +1,188 @@
+<%- include("../includes/header.ejs") %>
+    <%- include("../includes/sidebar.ejs") %>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Settings</h1>
+                        </div>
+                    </div>
+
+                    <!-- Main content -->
+                    <section class="content">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="table-responsive-sm">
+                                                <!-- Form to update Settings -->
+                                                <form action="/add_settings" method="POST">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="email">Email</label>
+                                                                <input type="email" class="form-control" id="email"
+                                                                    name="email" placeholder="Enter email">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="phone">Phone</label>
+                                                                <input type="text" class="form-control" id="phone"
+                                                                    name="phone" placeholder="Enter phone number">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="facebook">Facebook</label>
+                                                                <input type="text" class="form-control" id="facebook"
+                                                                    name="facebook" placeholder="Enter Facebook link">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="twitter">Twitter</label>
+                                                                <input type="text" class="form-control" id="twitter"
+                                                                    name="twitter" placeholder="Enter Twitter link">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="linkedIn">LinkedIn</label>
+                                                                <input type="text" class="form-control" id="linkedIn"
+                                                                    name="linkedIn" placeholder="Enter LinkedIn link">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="instagram">Instagram</label>
+                                                                <input type="text" class="form-control" id="instagram"
+                                                                    name="instagram" placeholder="Enter Instagram link">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="app_store">App Store Link</label>
+                                                                <input type="text" class="form-control" id="app_store"
+                                                                    name="app_store" placeholder="Enter App Store link">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="play_store">Play Store Link</label>
+                                                                <input type="text" class="form-control" id="play_store"
+                                                                    name="play_store"
+                                                                    placeholder="Enter Play Store link">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="logo">Logo URL</label>
+                                                                <input type="text" class="form-control" id="logo"
+                                                                    name="logo" placeholder="Enter logo URL">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="privacy_policy">Privacy Policy Link</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="privacy_policy" name="privacy_policy"
+                                                                    placeholder="Enter Privacy Policy link">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="settingsDecription">Description</label>
+                                                        <textarea class="form-control" id="settingsDecription"
+                                                            name="decription" rows="3"
+                                                            placeholder="Enter description"></textarea>
+                                                    </div>
+
+                                                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                                                </form>
+
+                                                <!-- Display Settings in Grid -->
+                                                    <div class="row mt-3">
+                                                        <% settings.forEach(function(setting) { %>
+                                                            <div class="col-md-4">
+                                                                <div class="card mb-3 shadow-sm">
+                                                                    <div class="card-body">
+                                                                        <p class="card-text">
+                                                                            <% if (setting.email) { %>
+                                                                                <strong>Email: </strong><%= setting.email %><br/>
+                                                                            <% } %>
+                                                                            <% if (setting.phone) { %>
+                                                                                <strong>Phone: </strong><%= setting.phone %><br/>
+                                                                            <% } %>
+                                                                        </p>
+                                                                        
+                                                                        <% if (setting.facebook || setting.twitter || setting.linkedIn || setting.instagram) { %>
+                                                                            <p class="card-text">
+                                                                                <strong>Social Media:</strong><br/>
+                                                                                <% if (setting.facebook) { %> Facebook: <%= setting.facebook %><br/> <% } %>
+                                                                                <% if (setting.twitter) { %> Twitter: <%= setting.twitter %><br/> <% } %>
+                                                                                <% if (setting.linkedIn) { %> LinkedIn: <%= setting.linkedIn %><br/> <% } %>
+                                                                                <% if (setting.instagram) { %> Instagram: <%= setting.instagram %><br/> <% } %>
+                                                                            </p>
+                                                                        <% } %>
+
+                                                                        <% if (setting.app_store || setting.play_store) { %>
+                                                                            <p class="card-text">
+                                                                                <strong>App Store Links:</strong><br/>
+                                                                                <% if (setting.app_store) { %> App Store: <%= setting.app_store %><br/> <% } %>
+                                                                                <% if (setting.play_store) { %> Play Store: <%= setting.play_store %><br/> <% } %>
+                                                                            </p>
+                                                                        <% } %>
+
+                                                                        <% if (setting.logo) { %>
+                                                                            <p class="card-text">
+                                                                                <strong>Logo:</strong><br/>
+                                                                                <img src="<%= setting.logo %>" alt="Logo" class="img-fluid"/>
+                                                                            </p>
+                                                                        <% } %>
+
+                                                                        <% if (setting.privacy_policy) { %>
+                                                                            <p class="card-text">
+                                                                                <strong>Privacy Policy:</strong><br/>
+                                                                                <a href="<%= setting.privacy_policy %>" target="_blank">View Policy</a>
+                                                                            </p>
+                                                                        <% } %>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        <% }) %>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Control Sidebar -->
+            <aside class="control-sidebar control-sidebar-dark"></aside>
+
+            <%- include("../includes/footer.ejs") %>
+                </body>
+
+                </html>

@@ -184,6 +184,11 @@ const registerAPI = async (req, res) => {
                 path: err.path,
             });
         });
+
+        return res.json({
+            status: false,
+            message: errorMsg,
+        })
     }
 
     let { fullname, email, password } = req.body;
