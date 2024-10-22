@@ -18,7 +18,6 @@ const imageHelper = require("../helpers//store_image");
 
 const Middleware = require("../middlewares/auth_middleware");
 
-
 router.use(passport.initialize());
 router.use(passport.session());
 
@@ -36,7 +35,7 @@ router.get("/auth/google/callback",
     passport.authenticate('google', {
         failureRedirect: '/register',
     }), authController.registerWithGoogle);
-
+    
 
 // Forgot password routes
 router.get("/forgot_password", Middleware.reverseAuthenticate, authController.forgotPassword);

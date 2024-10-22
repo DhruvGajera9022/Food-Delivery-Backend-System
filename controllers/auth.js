@@ -149,7 +149,7 @@ const loginAPI = async (req, res) => {
         status: true,
         message: "Login successful",
         token: token,
-        data:{
+        data: {
             fullName: user.fullName,
             email: user.email,
             image: `${baseURL}/img/userImages/${user.image}`,
