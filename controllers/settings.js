@@ -1,6 +1,7 @@
 const Settings = require("../models/settings");
 const fs = require("fs");
 require("dotenv").config();
+const { body, validationResult } = require('express-validator');
 
 
 
@@ -155,10 +156,48 @@ const settingsAPI = async (req, res) => {
 }
 
 
+const postSettingsAPI = async (req, res) => {
+    await body('email').isEmail().withMessage('Invalid email format').run(req);
+    await body('phone').isMobilePhone().withMessage('Invalid phone number').run(req);
+
+    // Find validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.json({
+            status: false,
+            errors: errors.array()
+        });
+    }
+
+    let baseURL = `${process.env.URL}${process.env.PORT}`;
+
+    const newSetting = {
+        email: req.body.email,
+        phone: req.body.phone,
+        facebook: req.body.facebook,
+        twitter: req.body.twitter,
+        linkedIn: req.body.linkedIn,
+        instagram: req.body.instagram,
+        app_store: req.body.app_store,
+        play_store: req.body.play_store,
+        description: req.body.description,
+        privacy_policy: req.body.privacy_policy,
+        term_condition: req.body.term_condition,
+        logo: `${baseURL}/img/settingImages/${req.body.logo}`,
+    };
+
+    return res.json({
+        status: true,
+        message: 'Settings saved successfully',
+        data: newSetting
+    });
+}
+
 
 module.exports = {
     addSettings,
     displaySettings,
     getSettings,
     settingsAPI,
+    postSettingsAPI,
 }
