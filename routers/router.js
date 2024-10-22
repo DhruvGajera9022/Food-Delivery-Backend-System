@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+const passport = require("passport");
+require("../passport");
+
 const authController = require("../controllers/auth");
 const dashboardController = require("../controllers/dashboard");
 const profileController = require("../controllers/profile");
@@ -16,6 +19,10 @@ const imageHelper = require("../helpers//store_image");
 const Middleware = require("../middlewares/auth_middleware");
 
 
+router.use(passport.initialize());
+router.use(passport.session());
+
+
 // Login routes
 router.get("/login", Middleware.reverseAuthenticate, authController.loginPage);
 router.post("/login", authController.validateLogin, authController.loginUser);
@@ -24,6 +31,11 @@ router.post("/login", authController.validateLogin, authController.loginUser);
 // Registration routes
 router.get("/register", Middleware.reverseAuthenticate, authController.registerPage);
 router.post("/register", authController.validateRegistration, authController.registerUser);
+router.get("/auth/google", passport.authenticate('google', { scope: ['email', 'profile'] }));
+router.get("/auth/google/callback",
+    passport.authenticate('google', {
+        failureRedirect: '/register',
+    }), authController.registerWithGoogle);
 
 
 // Forgot password routes
@@ -117,8 +129,9 @@ router.get("/user_logout", dashboardController.logout);
 router.get("/api/category", categoryController.categoriesAPI);
 router.get("/api/products", productController.productsAPI);
 router.get("/api/address", profileController.addressAPI);
-router.get("/api/login", authController.loginAPI);
+router.post("/api/login", authController.loginAPI);
 router.post("/api/register", authController.validateRegistration, authController.registerAPI);
+router.get("/api/settings", settingsController.settingsAPI);
 
 
 module.exports = router;

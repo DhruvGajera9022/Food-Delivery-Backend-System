@@ -3,6 +3,7 @@ const Users = require("../models/user");
 require("dotenv").config();
 const { check, validationResult } = require('express-validator');
 const JWT = require("jsonwebtoken");
+require("../passport");
 
 
 
@@ -84,12 +85,75 @@ const validateLogin = [
 
 // API for login
 const loginAPI = async (req, res) => {
-    const token = JWT.sign({ id: loginUser.user }, process.env.TOKEN_SECRET);
+    const errorMsg = [];
+    const errors = validationResult(req);
 
-    return res.status(200).json({
+    // Check for validation errors
+    if (!errors.isEmpty()) {
+        errors.array().forEach(err => {
+            errorMsg.push({
+                param: err.param,
+                msg: err.msg,
+                value: err.value,
+                path: err.path,
+            });
+        });
+
+        return res.json({
+            status: false,
+            message: errorMsg,
+        });
+    }
+
+    const { email, password } = req.body;
+
+    const user = await Users.findOne({ where: { email } });
+    if (!user) {
+        errorMsg.push({
+            param: "email",
+            msg: "User with this email does not exist",
+            value: email,
+            path: 'email',
+        });
+        return res.json({
+            status: false,
+            message: errorMsg,
+        });
+    }
+
+    // Compare provided password with hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        errorMsg.push({
+            param: "password",
+            msg: "Invalid password",
+            value: password,
+            path: 'password',
+        });
+        return res.json({
+            status: false,
+            message: errorMsg,
+        });
+    }
+
+    // Generate JWT token
+    const token = JWT.sign({ id: user.id }, process.env.TOKEN_SECRET);
+
+    // Set session and cookie
+    req.session.user = { id: user.id, fullName: user.fullName };
+    res.cookie('userData', { id: user.id, fullName: user.fullName });
+
+    let baseURL = `${process.env.URL}${process.env.PORT}`;
+
+    return res.json({
         status: true,
+        message: "Login successful",
         token: token,
-        message: ["Login successful"],
+        data:{
+            fullName: user.fullName,
+            email: user.email,
+            image: `${baseURL}/img/userImages/${user.image}`,
+        }
     });
 };
 
@@ -161,6 +225,30 @@ const registerUser = async (req, res) => {
         });
     }
 };
+// To store data in database from google register
+const registerWithGoogle = async (req, res) => {
+    const { displayName, email, picture } = req.user;
+
+    let user = await Users.findOne({ where: { email: email } });
+
+    if (!user) {
+        user = await Users.create({
+            fullName: displayName,
+            email: email,
+            image: picture,
+        });
+    }
+
+    let userData = {
+        fullName: displayName,
+        email: email,
+        image: picture,
+    }
+
+    req.session.user = { id: user.id, fullName: user.fullName };
+    res.cookie('userData', userData);
+    res.redirect("/");
+}
 // To validate register fields
 const validateRegistration = [
     check('fullname', 'Full name is required').notEmpty(),
@@ -312,6 +400,7 @@ module.exports = {
 
     registerPage,
     registerUser,
+    registerWithGoogle,
     validateRegistration,
 
     registerAPI,

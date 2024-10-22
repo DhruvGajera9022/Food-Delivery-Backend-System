@@ -1,14 +1,15 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="/" class="brand-link">
-    <img src="/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: 0.8" />
+    <img src="/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+      style="opacity: 0.8" />
     <span class="brand-text font-weight-light">AdminLTE 3</span>
   </a>
 
   <div class="sidebar">
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="image">
-        <img class="img-circle elevation-2" alt="User Image" />
+        <img id="UserImage" src="" class="img-circle elevation-2" alt="User Image" style="display:none;" />
       </div>
       <div class="info">
         <a href="#" class="d-block"></a>
@@ -18,7 +19,7 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        
+
         <!-- Dashboard -->
         <li class="nav-item">
           <a href="/" class="nav-link <%= title == "Dashboard"?"active":"" %>">
@@ -29,7 +30,8 @@
 
         <!-- Users (Initially hidden) -->
         <li class="nav-item admin-only" style="display:none;">
-          <a href="/users" class="nav-link <%= ["Users", "Add User", "Edit User"].includes(title) ? "active" : "" %>">
+          <a href="/users" class="nav-link <%= ["Users", "Add User" , "Edit User" ].includes(title) ? "active" : ""
+            %>">
             <i class="nav-icon fas fa-user-alt"></i>
             <p>Users</p>
           </a>
@@ -37,7 +39,7 @@
 
         <!-- Roles (Initially hidden) -->
         <li class="nav-item admin-only" style="display:none;">
-          <a href="/role" class="nav-link <%= ["Role", "Add Role", "Edit Role"].includes(title) ? "active" : "" %>">
+          <a href="/role" class="nav-link <%= ["Role", "Add Role" , "Edit Role" ].includes(title) ? "active" : "" %>">
             <i class="nav-icon fas fa-user-cog"></i>
             <p>Role</p>
           </a>
@@ -45,7 +47,8 @@
 
         <!-- Category (Initially hidden) -->
         <li class="nav-item admin-only" style="display:none;">
-          <a href="/category" class="nav-link <%= ["Category", "Add Category", "Edit Category"].includes(title) ? "active" : "" %>">
+          <a href="/category" class="nav-link <%= ["Category", "Add Category" , "Edit Category" ].includes(title)
+            ? "active" : "" %>">
             <i class="nav-icon fa fa-list-alt"></i>
             <p>Category</p>
           </a>
@@ -53,7 +56,8 @@
 
         <!-- Products (Initially hidden) -->
         <li class="nav-item admin-only" style="display:none;">
-          <a href="/product" class="nav-link <%= ["Products", "Add Product", "Edit Product"].includes(title) ? "active" : "" %>">
+          <a href="/product" class="nav-link <%= ["Products", "Add Product" , "Edit Product" ].includes(title)
+            ? "active" : "" %>">
             <i class="nav-icon fas fa-shopping-bag"></i>
             <p>Products</p>
           </a>
@@ -61,7 +65,8 @@
 
         <!-- Invoice (Initially hidden) -->
         <li class="nav-item admin-only" style="display:none;">
-          <a href="/invoice" class="nav-link <%= ["Invoice", "Add Invoice", "Edit Invoice"].includes(title) ? "active" : "" %>">
+          <a href="/invoice" class="nav-link <%= ["Invoice", "Add Invoice" , "Edit Invoice" ].includes(title)
+            ? "active" : "" %>">
             <i class="nav-icon fas fa-file-invoice-dollar"></i>
             <p>Invoice</p>
           </a>
@@ -69,7 +74,8 @@
 
         <!-- Settings (Initially hidden) -->
         <li class="nav-item admin-only" style="display:none;">
-          <a href="/settings" class="nav-link <%= ["Settings", "Add Settings", "Edit Settings"].includes(title) ? "active" : "" %>">
+          <a href="/settings" class="nav-link <%= ["Settings", "Add Settings" , "Edit Settings" ].includes(title)
+            ? "active" : "" %>">
             <i class="nav-icon fa fa-cog"></i>
             <p>Settings</p>
           </a>
@@ -98,7 +104,6 @@
 
   $(document).ready(function () {
     const userPanelInfo = $('.user-panel .info a');
-    const userImage = $('.user-panel .image img');
     const adminNavItems = $('.admin-only');
 
     // Get userData cookie
@@ -111,13 +116,21 @@
       const image = userData.image;
       const role = userData.role;
 
-      // Update UI with values
       if (fullName) {
         userPanelInfo.html(fullName);
       }
-      if (image) {
-        userImage.attr('src', '/img/userImages/' + image);
+      console.log(image);
+      // debugger
+
+      if (image && image.startsWith('image')) {
+        $('#UserImage').attr('src', '/img/userImages/' + image).show();
+      } else if (image) {
+        $('#UserImage').attr('src', image).show();
+      } else {
+        $('#UserImage').hide();
       }
+
+
       if (role === '1') {
         adminNavItems.show();
       }

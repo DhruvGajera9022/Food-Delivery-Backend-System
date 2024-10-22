@@ -19,7 +19,7 @@ app.use(express.static("plugins"));
 let fileStoreOptions = {};
 
 app.use(session({
-    secret: 'secret-key',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: new FileStore(fileStoreOptions),
