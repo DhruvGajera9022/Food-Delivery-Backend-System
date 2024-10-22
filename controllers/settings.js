@@ -1,5 +1,6 @@
 const Settings = require("../models/settings");
 const fs = require("fs");
+require("dotenv").config();
 
 
 
@@ -110,7 +111,6 @@ const addSettings = async (req, res) => {
 
 
 
-
 // To get all settings data
 const getAllSettings = async () => {
     return await Settings.findAll({});
@@ -118,11 +118,40 @@ const getAllSettings = async () => {
 
 
 
-// Api
+// To display in settings page
 const getSettings = async (req, res) => {
-    const settings = await getAllSettings();
+    let settings = await getAllSettings();
 
     return res.json(settings);
+}
+
+// settings API
+const settingsAPI = async (req, res) => {
+    let settings = await getAllSettings();
+    let baseURL = `${process.env.URL}${process.env.PORT}`;
+
+    settings = settings.map((setting) => {
+        return {
+            id: setting.id,
+            email: setting.email,
+            phone: setting.phone,
+            facebook: setting.facebook,
+            twitter: setting.twitter,
+            linkedIn: setting.linkedIn,
+            instagram: setting.instagram,
+            app_store: setting.app_store,
+            play_store: setting.play_store,
+            description: setting.description,
+            privacy_policy: setting.privacy_policy,
+            term_condition: setting.term_condition,
+            logo: `${baseURL}/img/settingImages/${setting.logo}`,
+        }
+    });
+
+    return res.json({
+        status: true,
+        data: settings
+    });
 }
 
 
@@ -131,4 +160,5 @@ module.exports = {
     addSettings,
     displaySettings,
     getSettings,
+    settingsAPI,
 }

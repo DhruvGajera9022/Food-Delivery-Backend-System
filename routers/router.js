@@ -119,6 +119,7 @@ router.get("/api/products", productController.productsAPI);
 router.get("/api/address", profileController.addressAPI);
 router.get("/api/login", authController.loginAPI);
 router.post("/api/register", authController.validateRegistration, authController.registerAPI);
+router.get("/api/settings", settingsController.settingsAPI);
 
 
 module.exports = router;
