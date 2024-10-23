@@ -50,16 +50,20 @@ const loginUser = async (req, res) => {
         });
     }
 
+    // Generate JWT token
+    const token = JWT.sign({ id: user.id }, process.env.TOKEN_SECRET);
+
     let userData = {
         fullName: user.fullName,
         image: user.image,
-        role: user.role
+        role: user.role,
+        token: token
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (isPasswordValid) {
-        req.session.user = { id: user.id, fullName: user.fullName };
+        req.session.user = { id: user.id, fullName: user.fullName, token: token };
         res.cookie('userData', userData);
         return res.redirect("/");
     } else {
@@ -80,82 +84,6 @@ const validateLogin = [
     check('email', 'Email is required').notEmpty(),
     check('password', 'Password is required').notEmpty(),
 ];
-
-
-
-// API for login
-const loginAPI = async (req, res) => {
-    const errorMsg = [];
-    const errors = validationResult(req);
-
-    // Check for validation errors
-    if (!errors.isEmpty()) {
-        errors.array().forEach(err => {
-            errorMsg.push({
-                param: err.param,
-                msg: err.msg,
-                value: err.value,
-                path: err.path,
-            });
-        });
-
-        return res.json({
-            status: false,
-            message: errorMsg,
-        });
-    }
-
-    const { email, password } = req.body;
-
-    const user = await Users.findOne({ where: { email } });
-    if (!user) {
-        errorMsg.push({
-            param: "email",
-            msg: "User with this email does not exist",
-            value: email,
-            path: 'email',
-        });
-        return res.json({
-            status: false,
-            message: errorMsg,
-        });
-    }
-
-    // Compare provided password with hashed password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-        errorMsg.push({
-            param: "password",
-            msg: "Invalid password",
-            value: password,
-            path: 'password',
-        });
-        return res.json({
-            status: false,
-            message: errorMsg,
-        });
-    }
-
-    // Generate JWT token
-    const token = JWT.sign({ id: user.id }, process.env.TOKEN_SECRET);
-
-    // Set session and cookie
-    req.session.user = { id: user.id, fullName: user.fullName };
-    res.cookie('userData', { id: user.id, fullName: user.fullName });
-
-    let baseURL = `${process.env.URL}${process.env.PORT}`;
-
-    return res.json({
-        status: true,
-        message: "Login successful",
-        token: token,
-        data: {
-            fullName: user.fullName,
-            email: user.email,
-            image: `${baseURL}/img/userImages/${user.image}`,
-        }
-    });
-};
 
 
 
@@ -225,57 +153,6 @@ const registerUser = async (req, res) => {
         });
     }
 };
-// To store data in database from google register
-const registerWithGoogle = async (req, res) => {
-    const { displayName, email, picture } = req.user;
-
-    let user = await Users.findOne({ where: { email: email } });
-
-    if (!user) {
-        user = await Users.create({
-            fullName: displayName,
-            email: email,
-            image: picture,
-        });
-    }
-
-    let userData = {
-        fullName: displayName,
-        email: email,
-        image: picture,
-    }
-
-    req.session.user = { id: user.id, fullName: user.fullName };
-    res.cookie('userData', userData);
-    res.redirect("/");
-}
-// To store data in database from facebook register
-const registerWithFacebook = async (req, res) => {
-    const { displayName, emails, photos } = req.user;
-
-    const email = emails && emails[0] ? emails[0].value : null;
-
-    let user = await Users.findOne({ where: { email: email } });
-
-    if (!user) {
-        user = await Users.create({
-            fullName: displayName,
-            email: email,
-            image: photos ? photos[0].value : null,
-        });
-    }
-
-    let userData = {
-        fullName: displayName,
-        email: email,
-        image: photos ? photos[0].value : null,
-    }
-
-
-    req.session.user = { id: user.id, fullName: user.fullName };
-    res.cookie('userData', userData);
-    res.redirect("/");
-}
 // To validate register fields
 const validateRegistration = [
     check('fullname', 'Full name is required').notEmpty(),
@@ -283,67 +160,6 @@ const validateRegistration = [
     check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
     check('confirmpassword', 'Passwords do not match').custom((value, { req }) => value === req.body.password),
 ];
-
-
-// API for registration
-const registerAPI = async (req, res) => {
-    const errorMsg = [];
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        errors.array().forEach(err => {
-            errorMsg.push({
-                param: err.param,
-                msg: err.msg,
-                value: err.value,
-                path: err.path,
-            });
-        });
-
-        return res.json({
-            status: false,
-            message: errorMsg,
-        });
-    }
-
-    let { fullname, email, password } = req.body;
-
-    const existingUser = await Users.findOne({ where: { email } });
-    if (existingUser) {
-        errorMsg.push({
-            param: "email",
-            msg: "User with this email already exists.",
-            value: email,
-            path: 'email',
-        });
-    }
-
-    if (errorMsg.length == 0) {
-        const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
-
-        const isUserCreated = await Users.create({
-            fullName: fullname,
-            email: email,
-            password: hashedPassword,
-        });
-
-        if (isUserCreated) {
-            message: "Registration successfull"
-        } /*else {
-            errorMsg.push({
-                param: "registration",
-                msg: "User registration failed.",
-                value: null,
-                path: 'registration',
-            });
-        }*/
-    }
-
-    return res.json({
-        status: errorMsg.length > 0 ? false : true,
-        message: errorMsg.length > 0 ? errorMsg : 'Registration successfull'
-    });
-}
 
 
 
@@ -415,6 +231,196 @@ const validatePasswordChange = [
     check('password', 'Password must be at least 6 characters long').isLength({ min: 6 }),
     check('confirmpassword', 'Passwords do not match').custom((value, { req }) => value === req.body.password),
 ];
+
+
+
+// To store data in database from google register
+const registerWithGoogle = async (req, res) => {
+    const { displayName, email, picture } = req.user;
+
+    let user = await Users.findOne({ where: { email: email } });
+
+    if (!user) {
+        user = await Users.create({
+            fullName: displayName,
+            email: email,
+            image: picture,
+        });
+    }
+
+    let userData = {
+        fullName: displayName,
+        email: email,
+        image: picture,
+    }
+
+    req.session.user = { id: user.id, fullName: user.fullName };
+    res.cookie('userData', userData);
+    res.redirect("/");
+}
+// To store data in database from facebook register
+const registerWithFacebook = async (req, res) => {
+    const { displayName, emails, photos } = req.user;
+
+    const email = emails && emails[0] ? emails[0].value : null;
+
+    let user = await Users.findOne({ where: { email: email } });
+
+    if (!user) {
+        user = await Users.create({
+            fullName: displayName,
+            email: email,
+            image: photos ? photos[0].value : null,
+        });
+    }
+
+    let userData = {
+        fullName: displayName,
+        email: email,
+        image: photos ? photos[0].value : null,
+    }
+
+
+    req.session.user = { id: user.id, fullName: user.fullName };
+    res.cookie('userData', userData);
+    res.redirect("/");
+}
+
+
+
+// API for login
+const loginAPI = async (req, res) => {
+    const errorMsg = [];
+    const errors = validationResult(req);
+
+    // Check for validation errors
+    if (!errors.isEmpty()) {
+        errors.array().forEach(err => {
+            errorMsg.push({
+                param: err.param,
+                msg: err.msg,
+                value: err.value,
+                path: err.path,
+            });
+        });
+
+        return res.json({
+            status: false,
+            message: errorMsg,
+        });
+    }
+
+    const { email, password } = req.body;
+
+    const user = await Users.findOne({ where: { email } });
+    if (!user) {
+        errorMsg.push({
+            param: "email",
+            msg: "User with this email does not exist",
+            value: email,
+            path: 'email',
+        });
+        return res.json({
+            status: false,
+            message: errorMsg,
+        });
+    }
+
+    // Compare provided password with hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        errorMsg.push({
+            param: "password",
+            msg: "Invalid password",
+            value: password,
+            path: 'password',
+        });
+        return res.json({
+            status: false,
+            message: errorMsg,
+        });
+    }
+
+    // Generate JWT token
+    const token = JWT.sign({ id: user.id }, process.env.TOKEN_SECRET);
+    console.log('Generated Token:', token);
+
+    // Set session and cookie
+    req.session.user = { id: user.id, fullName: user.fullName };
+    res.cookie('userData', { id: user.id, fullName: user.fullName });
+
+    let baseURL = `${process.env.URL}${process.env.PORT}`;
+
+    return res.json({
+        status: true,
+        message: "Login successful",
+        token: token,
+        data: {
+            fullName: user.fullName,
+            email: user.email,
+            image: `${baseURL}/img/userImages/${user.image}`,
+        }
+    });
+};
+// API for registration
+const registerAPI = async (req, res) => {
+    const errorMsg = [];
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        errors.array().forEach(err => {
+            errorMsg.push({
+                param: err.param,
+                msg: err.msg,
+                value: err.value,
+                path: err.path,
+            });
+        });
+
+        return res.json({
+            status: false,
+            message: errorMsg,
+        });
+    }
+
+    let { fullname, email, password } = req.body;
+
+    const existingUser = await Users.findOne({ where: { email } });
+    if (existingUser) {
+        errorMsg.push({
+            param: "email",
+            msg: "User with this email already exists.",
+            value: email,
+            path: 'email',
+        });
+    }
+
+    if (errorMsg.length == 0) {
+        const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
+
+        const isUserCreated = await Users.create({
+            fullName: fullname,
+            email: email,
+            password: hashedPassword,
+        });
+
+        if (isUserCreated) {
+            message: "Registration successfull"
+        } /*else {
+            errorMsg.push({
+                param: "registration",
+                msg: "User registration failed.",
+                value: null,
+                path: 'registration',
+            });
+        }*/
+    }
+
+    return res.json({
+        status: errorMsg.length > 0 ? false : true,
+        message: errorMsg.length > 0 ? errorMsg : 'Registration successfull'
+    });
+}
 
 
 

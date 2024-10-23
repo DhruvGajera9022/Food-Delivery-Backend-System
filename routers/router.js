@@ -17,6 +17,7 @@ const settingsController = require("../controllers/settings");
 const imageHelper = require("../helpers//store_image");
 
 const Middleware = require("../middlewares/auth_middleware");
+const JWTMiddleware = require("../middlewares/jwt_token");
 
 router.use(passport.initialize());
 router.use(passport.session());
@@ -141,10 +142,12 @@ router.get("/api/products", productController.productsAPI);
 router.get("/api/address", profileController.addressAPI);
 router.get("/api/settings", settingsController.settingsAPI);
 
+
 // Post APIs
 router.post("/api/login", authController.loginAPI);
 router.post("/api/register", authController.validateRegistration, authController.registerAPI);
 router.post("/api/settings", settingsController.postSettingsAPI);
+router.post("/api/address", JWTMiddleware.JWTMiddleware, profileController.validateAddress, profileController.postAddressAPI);
 
 
 module.exports = router;

@@ -126,7 +126,9 @@ const getSettings = async (req, res) => {
     return res.json(settings);
 }
 
-// settings API
+
+
+// get API for settings
 const settingsAPI = async (req, res) => {
     let settings = await getAllSettings();
     let baseURL = `${process.env.URL}${process.env.PORT}`;
@@ -154,8 +156,7 @@ const settingsAPI = async (req, res) => {
         data: settings
     });
 }
-
-
+// post API for settings
 const postSettingsAPI = async (req, res) => {
     await body('email').isEmail().withMessage('Invalid email format').run(req);
     await body('phone').isMobilePhone().withMessage('Invalid phone number').run(req);
@@ -192,6 +193,7 @@ const postSettingsAPI = async (req, res) => {
         data: newSetting
     });
 }
+
 
 
 module.exports = {

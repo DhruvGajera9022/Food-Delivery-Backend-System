@@ -103,7 +103,7 @@ const getAddress = async (req, res) => {
 };
 // To add-edit Address
 const addAddress = async (req, res) => {
-    const user = req.session.user;
+    const user = await sessionHelper.loggedInUserData(req);
 
     let { id, no, street, city, state, zipCode, landMark, country, type, isDefault, fullName, number } = req.body;
 
@@ -173,9 +173,48 @@ const deleteAddress = async (req, res) => {
         res.redirect("/profile");
     }
 }
+// Validate address fields
+const validateAddress = [
+    check('no')
+        .notEmpty().withMessage('House number is required.')
+        .isNumeric().withMessage('House number must be numeric.'),
+
+    check('street')
+        .notEmpty().withMessage('Street is required.')
+        .isString().withMessage('Street must be a string.'),
+
+    check('city')
+        .notEmpty().withMessage('City is required.')
+        .isString().withMessage('City must be a string.'),
+
+    check('state')
+        .notEmpty().withMessage('State is required.')
+        .isString().withMessage('State must be a string.'),
+
+    check('zipCode')
+        .notEmpty().withMessage('Zip code is required.')
+        .isPostalCode('any').withMessage('Invalid zip code format.'),
+
+    check('country')
+        .notEmpty().withMessage('Country is required.')
+        .isString().withMessage('Country must be a string.'),
+
+    check('type')
+        .notEmpty().withMessage('Address type is required.')
+        .isIn(['Work', 'Home', 'Office']).withMessage('Invalid address type.'),
+
+    check('fullName')
+        .notEmpty().withMessage('Full name is required.')
+        .isString().withMessage('Full name must be a string.'),
+
+    check('number')
+        .notEmpty().withMessage('Phone number is required.')
+        .isMobilePhone().withMessage('Invalid phone number format.')
+];
 
 
 
+// get API for address
 const addressAPI = async (req, res) => {
     let addresses = await Address.findAll({
         order: [
@@ -189,7 +228,75 @@ const addressAPI = async (req, res) => {
         data: addresses
     });
 }
+// post API for address
+const postAddressAPI = async (req, res) => {
+    const errors = validationResult(req);
 
+    if (!errors.isEmpty()) {
+        return res.json({ errors: errors.array() });
+    }
+
+    // Get user ID from JWT (set by JWTMiddleware)
+    const userId = req.id;
+
+    let {
+        id, no, street, city, state, zipCode,
+        landMark, country, type, isDefault,
+        fullName, number
+    } = req.body;
+
+    isDefault = isDefault === "on";
+
+
+    if (id) {
+        // Update existing address
+        if (isDefault === true) {
+            await Address.update(
+                { isDefault: false },
+                { where: { user_Id: userId } }
+            );
+        }
+
+        const isAddressUpdated = await Address.update({
+            no, street, city, state, zipCode,
+            landMark, country, type, isDefault,
+            user_Id: userId, fullName, number
+        }, { where: { id: id } });
+
+        if (isAddressUpdated > 0) {
+            return res.json({
+                message: 'Address updated successfully!',
+                address: { id, no, street, city, state, zipCode, landMark, country, type, isDefault, user_Id: userId, fullName, number }
+            });
+        } else {
+            return res.json({ message: 'Failed to update address.' });
+        }
+
+    } else {
+        // Add new address
+        if (isDefault === true) {
+            await Address.update(
+                { isDefault: false },
+                { where: { user_Id: userId } }
+            );
+        }
+
+        const newAddress = await Address.create({
+            no, street, city, state, zipCode,
+            landMark, country, type, isDefault,
+            user_Id: userId, fullName, number
+        });
+
+        if (newAddress) {
+            return res.json({
+                message: 'Address added successfully!',
+                address: newAddress
+            });
+        } else {
+            return res.json({ message: 'Failed to add new address.' });
+        }
+    }
+};
 
 
 
@@ -203,5 +310,8 @@ module.exports = {
     addAddress,
     deleteAddress,
 
+    validateAddress,
+
     addressAPI,
+    postAddressAPI,
 }
