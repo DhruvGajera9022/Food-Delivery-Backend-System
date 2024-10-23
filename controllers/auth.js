@@ -358,7 +358,7 @@ const loginAPI = async (req, res) => {
         data: {
             fullName: user.fullName,
             email: user.email,
-            image: `${baseURL}/img/userImages/${user.image}`,
+            image: user.image ? `${baseURL}/img/userImages/${user.image}` : null,
         }
     });
 };

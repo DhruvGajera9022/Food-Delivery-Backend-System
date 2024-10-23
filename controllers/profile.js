@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const Users = require("../models/user");
 const Address = require("../models/address");
+const Invoice = require("../models/invoice");
 
 const sessionHelper = require("../helpers/session_helper");
 const dateHelper = require("../helpers/date_formator");
@@ -297,7 +298,42 @@ const postAddressAPI = async (req, res) => {
         }
     }
 };
+// get API for all data of current user
+const meAPI = async (req, res) => {
+    const data = await sessionHelper.loggedInUserData(req);
+    const userData = await Users.findOne({ where: { id: data.id } });
+    let baseURL = `${process.env.URL}${process.env.PORT}`;
 
+    let addresses = await Address.findAll({
+        order: [
+            ['isDefault', 'DESC'],
+            ['id', 'DESC'],
+        ]
+    });
+
+    const formattedUserData = {
+        id: userData.id,
+        fullName: userData.fullName,
+        email: userData.email,
+        number: userData.number,
+        gender: userData.gender,
+        dob: userData.dob,
+        hobbies: userData.hobbies,
+        image: `${baseURL}/img/userImages/${userData.image}`,
+        role: userData.role,
+    };
+
+    const invoice = await Invoice.findAll({
+        where: { user_id: data.id }
+    });
+
+    res.json({
+        status: true,
+        userData: formattedUserData,
+        user_addresses: addresses,
+        invoice: invoice,
+    });
+}
 
 
 module.exports = {
@@ -314,4 +350,5 @@ module.exports = {
 
     addressAPI,
     postAddressAPI,
+    meAPI,
 }

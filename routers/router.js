@@ -141,6 +141,7 @@ router.get("/api/category", categoryController.categoriesAPI);
 router.get("/api/products", productController.productsAPI);
 router.get("/api/address", profileController.addressAPI);
 router.get("/api/settings", settingsController.settingsAPI);
+router.get("/api/me", profileController.meAPI);
 
 
 // Post APIs
