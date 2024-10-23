@@ -249,6 +249,33 @@ const registerWithGoogle = async (req, res) => {
     res.cookie('userData', userData);
     res.redirect("/");
 }
+// To store data in database from facebook register
+const registerWithFacebook = async (req, res) => {
+    const { displayName, emails, photos } = req.user;
+
+    const email = emails && emails[0] ? emails[0].value : null;
+
+    let user = await Users.findOne({ where: { email: email } });
+
+    if (!user) {
+        user = await Users.create({
+            fullName: displayName,
+            email: email,
+            image: photos ? photos[0].value : null,
+        });
+    }
+
+    let userData = {
+        fullName: displayName,
+        email: email,
+        image: photos ? photos[0].value : null,
+    }
+
+
+    req.session.user = { id: user.id, fullName: user.fullName };
+    res.cookie('userData', userData);
+    res.redirect("/");
+}
 // To validate register fields
 const validateRegistration = [
     check('fullname', 'Full name is required').notEmpty(),
@@ -401,6 +428,7 @@ module.exports = {
     registerPage,
     registerUser,
     registerWithGoogle,
+    registerWithFacebook,
     validateRegistration,
 
     registerAPI,

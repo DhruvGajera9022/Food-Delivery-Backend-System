@@ -30,12 +30,23 @@ router.post("/login", authController.validateLogin, authController.loginUser);
 // Registration routes
 router.get("/register", Middleware.reverseAuthenticate, authController.registerPage);
 router.post("/register", authController.validateRegistration, authController.registerUser);
+
+
+// Google Authentication
 router.get("/auth/google", passport.authenticate('google', { scope: ['email', 'profile'] }));
 router.get("/auth/google/callback",
     passport.authenticate('google', {
         failureRedirect: '/register',
     }), authController.registerWithGoogle);
-    
+
+
+// Facebook Authentication
+router.get("/auth/facebook", passport.authenticate('facebook'));
+router.get("/auth/facebook/callback",
+    passport.authenticate('facebook', {
+        failureRedirect: '/register',
+    }), authController.registerWithFacebook);
+
 
 // Forgot password routes
 router.get("/forgot_password", Middleware.reverseAuthenticate, authController.forgotPassword);
@@ -124,12 +135,13 @@ router.post("/address/delete/:id?", Middleware.authenticate, profileController.d
 router.get("/user_logout", dashboardController.logout);
 
 
-// APIs
+// Get APIs
 router.get("/api/category", categoryController.categoriesAPI);
 router.get("/api/products", productController.productsAPI);
 router.get("/api/address", profileController.addressAPI);
 router.get("/api/settings", settingsController.settingsAPI);
 
+// Post APIs
 router.post("/api/login", authController.loginAPI);
 router.post("/api/register", authController.validateRegistration, authController.registerAPI);
 router.post("/api/settings", settingsController.postSettingsAPI);
