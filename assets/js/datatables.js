@@ -21,6 +21,11 @@ $(document).ready(function () {
 
     $("#inovicetable").dataTable({});
 
+    $("#discounttable").dataTable({
+        order: [],
+        columnDefs: [{ orderable: false, targets: [0, 7] }]
+    });
+
 
     $("#privacy_policy").summernote({
         placeholder: "Write your content here",

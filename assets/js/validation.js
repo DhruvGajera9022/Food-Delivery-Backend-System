@@ -11,6 +11,7 @@ $(document).ready(function () {
     let formAddProduct = $("#formAddProduct");
     let formAddress = $("#formAddress");
     let addSettings = $("#addSettings");
+    let formAddDiscount = $("#formAddDiscount");
 
     loginForm.validate({
         rules: {
@@ -376,5 +377,36 @@ $(document).ready(function () {
                 required: "Phone number is required",
             },
         }
-    })
+    });
+
+    formAddDiscount.validate({
+        rules: {
+            name: {
+                required: true,
+            },
+            type: {
+                required: true,
+            },
+            value: {
+                required: true,
+            },
+            expire: {
+                required: true,
+            },
+        },
+        messages: {
+            name: {
+                required: "Discount name is required",
+            },
+            type: {
+                required: "Type is requied",
+            },
+            value: {
+                required: "Value is required",
+            },
+            expire: {
+                required: "Expiry date is require",
+            },
+        }
+    });
 });

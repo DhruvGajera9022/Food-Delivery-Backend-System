@@ -11,6 +11,7 @@ const userController = require("../controllers/user");
 const roleController = require("../controllers/role");
 const categoryController = require("../controllers/category");
 const productController = require("../controllers/products");
+const discountController = require("../controllers/discount");
 const invoiceController = require("../controllers/invoice");
 const settingsController = require("../controllers/settings");
 
@@ -108,6 +109,16 @@ router.post("/add_product", imageHelper.uploadProductImages, productController.p
 router.post("/add_product/delete/:id?", productController.deleteProduct);
 
 
+// Discount route
+router.get("/discount", Middleware.authenticate, Middleware.isAdmin, discountController.discount);
+
+
+// Add-Edit-Delete Discount route
+router.get("/add_discount/:id?", Middleware.authenticate, Middleware.isAdmin, discountController.displayDiscountPage);
+router.post("/add_discount", imageHelper.uploadDiscountImages, discountController.validateDiscount, discountController.addOrEditDiscount);
+router.post("/add_discount/delete/:id?", discountController.deleteDiscount);
+
+
 // Invoice route
 router.get("/invoice", Middleware.authenticate, Middleware.isAdmin, invoiceController.invoice);
 
@@ -141,6 +152,7 @@ router.get("/api/category", categoryController.categoriesAPI);
 router.get("/api/products", productController.productsAPI);
 router.get("/api/address", profileController.addressAPI);
 router.get("/api/settings", settingsController.settingsAPI);
+router.get("/api/discount", discountController.discountAPI);
 router.get("/api/me", profileController.meAPI);
 
 
@@ -149,6 +161,7 @@ router.post("/api/login", authController.loginAPI);
 router.post("/api/register", authController.validateRegistration, authController.registerAPI);
 router.post("/api/settings", settingsController.postSettingsAPI);
 router.post("/api/address", JWTMiddleware.JWTMiddleware, profileController.validateAddress, profileController.postAddressAPI);
+router.delete("/api/delete/address/:id", JWTMiddleware.JWTMiddleware, profileController.deleteAddressAPI);
 
 
 module.exports = router;

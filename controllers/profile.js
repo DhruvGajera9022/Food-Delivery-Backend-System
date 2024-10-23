@@ -298,6 +298,26 @@ const postAddressAPI = async (req, res) => {
         }
     }
 };
+// delete API for address
+const deleteAddressAPI = async (req, res) => {
+    const id = req.params.id;
+
+    if (id) {
+        const isAddressDeleted = await Address.destroy({ where: { id } });
+
+        if (isAddressDeleted) {
+            return res.json({
+                status: true,
+                message: 'Address deleted.',
+            })
+        }
+    }
+    return res.json({
+        status: false,
+        message: 'Address not found.',
+    });
+
+}
 // get API for all data of current user
 const meAPI = async (req, res) => {
     const data = await sessionHelper.loggedInUserData(req);
@@ -312,26 +332,21 @@ const meAPI = async (req, res) => {
     });
 
     const formattedUserData = {
-        id: userData.id,
         fullName: userData.fullName,
         email: userData.email,
         number: userData.number,
-        gender: userData.gender,
-        dob: userData.dob,
-        hobbies: userData.hobbies,
         image: `${baseURL}/img/userImages/${userData.image}`,
-        role: userData.role,
     };
 
     const invoice = await Invoice.findAll({
         where: { user_id: data.id }
     });
 
-    res.json({
+    return res.json({
         status: true,
-        userData: formattedUserData,
-        user_addresses: addresses,
-        invoice: invoice,
+        user: formattedUserData,
+        addresses: addresses,
+        invoices: invoice,
     });
 }
 
@@ -350,5 +365,6 @@ module.exports = {
 
     addressAPI,
     postAddressAPI,
+    deleteAddressAPI,
     meAPI,
 }

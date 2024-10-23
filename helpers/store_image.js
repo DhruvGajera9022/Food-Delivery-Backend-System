@@ -47,7 +47,7 @@ const uploadProductImages = multer({
 
 
 
-// Image upload setup for product 
+// Image upload setup for setting 
 let storageForSettingImage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "assets/img/settingImages/");
@@ -62,10 +62,26 @@ const uploadSettingImages = multer({
 
 
 
+// Image upload setup for discount 
+let storageForDiscountImage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "assets/img/discountImages/");
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname);
+    },
+});
+const uploadDiscountImages = multer({
+    storage: storageForDiscountImage,
+}).single("image"); // Single file upload for image
+
+
+
 
 module.exports = {
     uploadUserImage,
     uploadCategoryImage,
     uploadProductImages,
     uploadSettingImages,
+    uploadDiscountImages,
 }
