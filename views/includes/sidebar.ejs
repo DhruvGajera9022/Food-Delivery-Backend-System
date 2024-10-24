@@ -127,6 +127,7 @@
       if (fullName) {
         userPanelInfo.html(fullName);
       }
+      console.log(image);
       if (image && image.startsWith('image')) {
         $('#UserImage').attr('src', '/img/userImages/' + image).show();
       } else if (image) {

@@ -27,6 +27,9 @@ const allUsersData = async (req, res) => {
 
     res.render("users/users", { title: "Users", allData });
 };
+
+
+
 // To render page according to add or edit request
 const displayUserFormPage = async (req, res) => {
     // Operation on user

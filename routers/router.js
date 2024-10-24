@@ -14,11 +14,14 @@ const productController = require("../controllers/products");
 const discountController = require("../controllers/discount");
 const invoiceController = require("../controllers/invoice");
 const settingsController = require("../controllers/settings");
+const paymentController = require("../controllers/payment");
 
 const imageHelper = require("../helpers//store_image");
 
 const Middleware = require("../middlewares/auth_middleware");
 const JWTMiddleware = require("../middlewares/jwt_token");
+
+
 
 router.use(passport.initialize());
 router.use(passport.session());
@@ -162,6 +165,10 @@ router.post("/api/register", authController.validateRegistration, authController
 router.post("/api/settings", settingsController.postSettingsAPI);
 router.post("/api/address", JWTMiddleware.JWTMiddleware, profileController.validateAddress, profileController.postAddressAPI);
 router.delete("/api/delete/address/:id", JWTMiddleware.JWTMiddleware, profileController.deleteAddressAPI);
+
+
+// Payment route
+router.post("/api/checkout", paymentController.makePayment);
 
 
 module.exports = router;
