@@ -153,10 +153,10 @@ router.get("/user_logout", dashboardController.logout);
 // Get APIs
 router.get("/api/category", categoryController.categoriesAPI);
 router.get("/api/products", productController.productsAPI);
-router.get("/api/address", profileController.addressAPI);
+router.get("/api/address", JWTMiddleware.JWTMiddleware, profileController.addressAPI);
 router.get("/api/settings", settingsController.settingsAPI);
 router.get("/api/discount", discountController.discountAPI);
-router.get("/api/me", profileController.meAPI);
+router.get("/api/me", JWTMiddleware.JWTMiddleware, profileController.meAPI);
 
 
 // Post APIs
@@ -168,7 +168,7 @@ router.delete("/api/delete/address/:id", JWTMiddleware.JWTMiddleware, profileCon
 
 
 // Payment route
-router.post("/api/checkout", paymentController.makePayment);
-
+router.post("/checkout", paymentController.payment);
+router.post("/logPayment", paymentController.logPayment);
 
 module.exports = router;

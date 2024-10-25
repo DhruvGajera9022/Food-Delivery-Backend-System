@@ -217,11 +217,13 @@ const validateAddress = [
 
 // get API for address
 const addressAPI = async (req, res) => {
+    const data = await sessionHelper.loggedInUserData(req);
     let addresses = await Address.findAll({
         order: [
             ['isDefault', 'DESC'],
             ['id', 'DESC'],
-        ]
+        ],
+        where: { user_Id: data.id }
     });
 
     return res.json({
@@ -328,7 +330,8 @@ const meAPI = async (req, res) => {
         order: [
             ['isDefault', 'DESC'],
             ['id', 'DESC'],
-        ]
+        ],
+        where: { user_Id: data.id }
     });
 
     const formattedUserData = {

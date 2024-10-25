@@ -1,35 +1,44 @@
-const stripe = require("stripe")(process.env.STRIPE_SECRET);
+const Razorpay = require("razorpay");
 require("dotenv").config();
 
+const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
-const makePayment = async (req, res) => {
-    const { products } = req.body;
-    console.log(products);
+const payment = async (req, res) => {
 
-    const lineItems = products.map((product) => ({
-        price_data: {
-            currency: process.env.STRIPE_CURRENCY,
-            product_data: {
-                name: product.name,
-            },
-            unit_amount: product.price * 100,
-        },
-        quantity: product.quantity,
-    }));
+    const options = {
+        amount: req.body.amount * 100,
+        currency: req.body.currency,
+        receipt: "receipt#1",
+        payment_capture: 1,
+    };
 
-    const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: lineItems,
-        mode: "payment",
-        success_url: process.env.STRIPE_SUCCESS_URL,
-        cancel_url: process.env.STRIPE_CANCEL_URL
-    });
+    try {
+        const response = await razorpay.orders.create(options);
+        res.json({
+            order_id: response.id,
+            currency: response.currency,
+            amount: response.amount,
+        });
+    } catch (error) {
+        res.status(500).send("Internal server error");
+    }
+};
 
-    res.json({ id: session.id });
+const logPayment = async (req, res) => {
+    const paymentData = req.body;
+
+    console.log("Payment Data Received:", paymentData);
+
+    const paymentAllData = await razorpay.payments.fetch(paymentData.razorpay_payment_id);
+    console.log('Payment Data:', paymentAllData);
 
 }
 
 
 module.exports = {
-    makePayment,
-}
+    payment,
+    logPayment,
+};
