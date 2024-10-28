@@ -217,13 +217,12 @@ const validateAddress = [
 
 // get API for address
 const addressAPI = async (req, res) => {
-    const data = await sessionHelper.loggedInUserData(req);
     let addresses = await Address.findAll({
         order: [
             ['isDefault', 'DESC'],
             ['id', 'DESC'],
         ],
-        where: { user_Id: data.id }
+        where: { user_Id: req.userId }
     });
 
     return res.json({
@@ -330,8 +329,7 @@ const deleteAddressAPI = async (req, res) => {
 }
 // get API for all data of current user
 const meAPI = async (req, res) => {
-    const data = await sessionHelper.loggedInUserData(req);
-    const userData = await Users.findOne({ where: { id: data.id } });
+    const userData = await Users.findOne({ where: { id: req.userId } });
     let baseURL = `${process.env.URL}${process.env.PORT}`;
 
     let addresses = await Address.findAll({
@@ -339,7 +337,7 @@ const meAPI = async (req, res) => {
             ['isDefault', 'DESC'],
             ['id', 'DESC'],
         ],
-        where: { user_Id: data.id }
+        where: { user_Id: req.userId }
     });
 
     const formattedUserData = {
@@ -350,7 +348,7 @@ const meAPI = async (req, res) => {
     };
 
     const invoice = await Invoice.findAll({
-        where: { user_id: data.id }
+        where: { user_id: req.userId }
     });
 
     return res.json({

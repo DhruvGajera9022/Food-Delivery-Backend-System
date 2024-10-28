@@ -12,7 +12,7 @@ const JWTMiddleware = async (req, res, next) => {
     }
 
     const decoded = JWT.verify(token, process.env.TOKEN_SECRET);
-    req.id = decoded.id;
+    req.userId = decoded.id;
     next();
 };
 

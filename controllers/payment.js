@@ -41,7 +41,7 @@ const generateInvoice = async (req, res) => {
     // console.log("Payment Data Received:", paymentData);
 
     const paymentAllData = await razorpay.payments.fetch(paymentData.razorpay_payment_id);
-    // console.log("Payment Data:", paymentAllData);
+    console.log("Payment Data:", paymentAllData);
 
     const status = paymentAllData.captured ? 1 : 0;
 
