@@ -53,12 +53,23 @@ const generateInvoice = async (req, res) => {
             total_amount: paymentAllData.amount / 100,
             status,
         });
+
         console.log("Invoice generated.");
-        console.log(isInvoiceGenerated);
+
+        // Send the invoice ID in the response
+        return res.json({
+            success: true,
+            message: "Invoice generated successfully.",
+            invoiceId: isInvoiceGenerated.id
+        });
     }
 
-    
+    return res.json({
+        success: false,
+        message: "Payment data not found.",
+    });
 };
+
 
 
 

@@ -4,7 +4,7 @@ const Invoice = require("../models/invoice");
 
 // To display all invoice
 const invoice = async (req, res) => {
-    const allData = await getlAllInvoice();
+    const allData = await getAllInvoice();
     res.render("invoice/invoice", {
         title: "Invoice",
         allData: allData,
@@ -14,11 +14,12 @@ const invoice = async (req, res) => {
 
 
 // Fetch invoice
-const getlAllInvoice = async () => {
+const getAllInvoice = async () => {
     return await Invoice.findAll({
         order: [['id', 'DESC']]
     });
-}
+};
+
 
 
 module.exports = {

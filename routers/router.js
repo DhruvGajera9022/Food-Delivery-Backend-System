@@ -169,6 +169,6 @@ router.delete("/api/delete/address/:id", JWTMiddleware.JWTMiddleware, profileCon
 
 // Payment route
 router.post("/checkout", paymentController.payment);
-router.post("/logPayment", paymentController.generateInvoice);
+router.post("/payment", paymentController.generateInvoice);
 
 module.exports = router;

@@ -19,7 +19,9 @@ $(document).ready(function () {
         columnDefs: [{ orderable: false, targets: [0, 6] }]
     })
 
-    $("#inovicetable").dataTable({});
+    $("#inovicetable").dataTable({
+        order: [],
+    });
 
     $("#discounttable").dataTable({
         order: [],
