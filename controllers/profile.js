@@ -239,7 +239,7 @@ const postAddressAPI = async (req, res) => {
     }
 
     // Get user ID from JWT (set by JWTMiddleware)
-    const userId = req.id;
+    const userId = req.userId;
 
     let {
         id, no, street, city, state, zipCode,
@@ -302,7 +302,7 @@ const postAddressAPI = async (req, res) => {
         } else {
             return res.json({
                 status: false,
-                message: 'Failed to add new address.'
+                message: 'No any change in address'
             });
         }
     }

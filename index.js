@@ -4,7 +4,6 @@ const router = require("./routers/router");
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
 const cors = require("cors");
-const bodyParser = require('body-parser');
 
 const app = express();
 

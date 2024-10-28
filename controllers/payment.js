@@ -35,7 +35,6 @@ const payment = async (req, res) => {
 
 // get the transaction data and generate an invoce
 const generateInvoice = async (req, res) => {
-    // const data = await sessionHelper.loggedInUserData(req);
     const paymentData = req.body;
 
     // console.log("Payment Data Received:", paymentData);
@@ -48,6 +47,7 @@ const generateInvoice = async (req, res) => {
     if (paymentAllData) {
         const isInvoiceGenerated = await Invoice.create({
             user_id: 46,
+            // user_id: req.userId,
             transaction_id: paymentAllData.id,
             order_date: new Date(),
             total_amount: paymentAllData.amount / 100,
