@@ -268,11 +268,15 @@ const postAddressAPI = async (req, res) => {
 
         if (isAddressUpdated > 0) {
             return res.json({
+                status: true,
                 message: 'Address updated successfully!',
                 address: { id, no, street, city, state, zipCode, landMark, country, type, isDefault, user_Id: userId, fullName, number }
             });
         } else {
-            return res.json({ message: 'Failed to update address.' });
+            return res.json({
+                status: false,
+                message: 'Failed to update address.'
+            });
         }
 
     } else {
@@ -292,11 +296,15 @@ const postAddressAPI = async (req, res) => {
 
         if (newAddress) {
             return res.json({
+                status: true,
                 message: 'Address added successfully!',
                 address: newAddress
             });
         } else {
-            return res.json({ message: 'Failed to add new address.' });
+            return res.json({
+                status: false,
+                message: 'Failed to add new address.'
+            });
         }
     }
 };

@@ -12,7 +12,7 @@ const Invoice = sequelize.define("invoice", {
         type: Sequelize.INTEGER,
     },
     transaction_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
     },
     discount_id: {
         type: Sequelize.INTEGER,
