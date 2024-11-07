@@ -142,23 +142,3 @@ Ensure you have the following installed:
    ```bash
    npm start
    ```
-
-## Environment Variables
-
-Create a `.env` file in the project root and add the following:
-
-```plaintext
-PORT=3000
-URL=http://localhost:
-SESSION_SECRET=your_secret_key
-DB_HOST=localhost
-DB_USER=your_mysql_user
-DB_PASSWORD=your_mysql_password
-DB_NAME=your_database_name
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-FACEBOOK_CLIENT_ID=your_facebook_client_id
-FACEBOOK_CLIENT_SECRET=your_facebook_client_secret
-RAZORPAY_KEY_ID=your_razorpay_key_id
-RAZORPAY_KEY_SECRET=your_razorpay_key_secret
-```
