@@ -7,7 +7,7 @@ require("dotenv").config();
 
 // To display category page
 const categories = async (req, res) => {
-    let allData = await getlAllCategory();
+    let allData = await getAllCategory();
     res.render("category/category", { title: "Category", allData });
 }
 
@@ -117,13 +117,13 @@ const categoryValidationRules = [
 
 // To display all category in product form into dropdown
 const getCategory = async (req, res) => {
-    const categories = await getlAllCategory();
+    const categories = await getAllCategory();
     res.json(categories);
 };
 
 
 // Fetch category
-const getlAllCategory = async () => {
+const getAllCategory = async () => {
     return await Category.findAll({
         order: [['id', 'DESC']]
     });
@@ -132,7 +132,7 @@ const getlAllCategory = async () => {
 
 // API category
 const categoriesAPI = async (req, res) => {
-    let categories = await getlAllCategory();
+    let categories = await getAllCategory();
     let baseURL = `${process.env.URL}${process.env.PORT}`;
 
     categories = categories.filter(category => category.isActive);

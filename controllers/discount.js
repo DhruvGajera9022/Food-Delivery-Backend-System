@@ -87,7 +87,7 @@ const addOrEditDiscount = async (req, res) => {
             res.redirect("/discount");
         }
     } else {
-        // add dicount
+        // add discount
         const isDiscountAdded = await Discount.create({
             name: name,
             description: description,
