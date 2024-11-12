@@ -184,6 +184,16 @@ const discountAPI = async (req, res) => {
 }
 
 
+// 
+const singleDiscountAPI = async (req, res) => {
+    const discountId = req.query.discountId;
+
+    const discountData = await Discount.findOne({ where: { id: discountId } });
+
+    res.json({ discountPrice: discountData.value });
+
+}
+
 module.exports = {
     discount,
 
@@ -193,4 +203,5 @@ module.exports = {
     validateDiscount,
 
     discountAPI,
+    singleDiscountAPI,
 }

@@ -14,6 +14,7 @@ const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
 const discountRoute = require("./routes/discountRoute");
 const invoiceRoute = require("./routes/invoiceRoute");
+const invoiceDetailsRoute = require("./routes/invoiceDetailsRoute");
 const settingsRoute = require("./routes/settingsRoute");
 const paymentRoute = require("./routes/paymentRoute");
 
@@ -59,6 +60,7 @@ app.use("/", categoryRoute);
 app.use("/", productRoute);
 app.use("/", discountRoute);
 app.use("/", invoiceRoute);
+app.use("/", invoiceDetailsRoute);
 app.use("/", settingsRoute);
 app.use("/", paymentRoute);
 

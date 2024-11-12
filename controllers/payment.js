@@ -1,6 +1,8 @@
 const Razorpay = require("razorpay");
 require("dotenv").config();
 const Invoice = require("../models/invoice");
+const productModel = require("../models/products");
+const invoiceDetailsModel = require("../models/invoice_detail");
 
 
 // Razorpay key and secret
@@ -33,13 +35,14 @@ const payment = async (req, res) => {
 };
 
 
-// get the transaction data and generate an invoce
+// get the transaction data and generate an invoice
 const generateInvoice = async (req, res) => {
     const paymentData = req.body;
+    const cartItems = paymentData.cartItems;
 
-    // console.log("Payment Data Received:", paymentData);
+    // console.log("Payment Data: ", paymentData);
 
-    const paymentAllData = await razorpay.payments.fetch(paymentData.razorpay_payment_id);
+    const paymentAllData = await razorpay.payments.fetch(paymentData.payment_id);
     console.log("Payment Data:", paymentAllData);
 
     const status = paymentAllData.captured ? 1 : 0;
@@ -55,12 +58,17 @@ const generateInvoice = async (req, res) => {
         });
 
         console.log("Invoice generated.");
+        const invoiceId = isInvoiceGenerated.id;
+
+        if (isInvoiceGenerated) {
+            handleInvoiceDetails(cartItems, invoiceId);
+        }
 
         // Send the invoice ID in the response
         return res.json({
             success: true,
             message: "Invoice generated successfully.",
-            invoiceId: isInvoiceGenerated.id
+            invoiceId: invoiceId
         });
     }
 
@@ -70,6 +78,42 @@ const generateInvoice = async (req, res) => {
     });
 };
 
+
+
+// Generate invoice details
+const handleInvoiceDetails = async (cartItems, invoiceId) => {
+    const separatedItems = Object.entries(cartItems).map(([id, quantity]) => {
+        return {
+            productId: id,
+            quantity: quantity
+        };
+    });
+
+    // console.log("Separated Items: ", separatedItems);
+
+    try {
+        const processedOrder =
+            separatedItems.map(async (item) => {
+                const product = await productModel.findOne({
+                    where: { id: item.productId }
+                });
+                const price = product.price;
+
+                const newInvoiceDetail = await invoiceDetailsModel.create({
+                    invoice_id: invoiceId,
+                    product_id: item.productId,
+                    qty: item.quantity,
+                    price: price,
+                });
+
+                return newInvoiceDetail;
+            })
+    } catch (error) {
+        console.error("Error while handling invoice details:", error);
+    }
+
+
+}
 
 
 

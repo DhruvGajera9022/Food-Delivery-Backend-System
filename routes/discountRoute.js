@@ -19,6 +19,7 @@ router.post("/add_discount/delete/:id?", discountController.deleteDiscount);
 
 // API
 router.get("/api/discount", discountController.discountAPI);
+router.get("/api/discount/single", discountController.singleDiscountAPI);
 
 
 module.exports = router;
