@@ -18,7 +18,7 @@ const invoice = async (req, res) => {
 const deleteInvoice = async (req, res) => {
     const id = req.params.id;
     await Invoice.destroy({ where: { id } });
-    res.redirect("/invoice")
+    res.redirect("/invoice");
 }
 
 
@@ -29,7 +29,6 @@ const allInvoices = async (req, res) => {
         const userId = req.userId;
 
         const allInvoices = await Invoice.findAll({ where: { user_id: userId } });
-
 
         if (!allInvoices) {
             res.json({

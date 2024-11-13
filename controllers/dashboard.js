@@ -4,6 +4,9 @@ const { body, validationResult } = require('express-validator');
 require("dotenv").config();
 
 const Users = require("../models/user");
+const Category = require("../models/category");
+const Product = require("../models/products");
+const Invoice = require("../models/invoice");
 
 const sessionHelper = require("../helpers/session_helper");
 
@@ -19,7 +22,24 @@ const getLoggedInUserData = async (req, res) => {
 
 // To display dashboard
 const dashboard = async (req, res) => {
-    res.render("dashboard/dashboard", { title: "Dashboard" });
+
+    const users = await Users.findAll({});
+    const categories = await Category.findAll({});
+    const products = await Product.findAll({});
+    const invoices = await Invoice.findAll({});
+
+    // Calculate total income by summing up each invoice's totalAmount
+    const totalIncome = invoices.reduce((sum, invoice) => sum + (invoice.total_amount || 0), 0);
+
+    // console.log(totalIncome);
+
+    res.render("dashboard/dashboard", {
+        title: "Dashboard",
+        users: users.length,
+        categories: categories.length,
+        products: products.length,
+        totalIncome: totalIncome,
+    });
 }
 // To change password from dashboard
 const dashboardChangePassword = async (req, res) => {

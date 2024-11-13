@@ -1,111 +1,94 @@
 <%- include("../includes/header.ejs") %>
 
-      <%- include("../includes/sidebar.ejs") %>
+  <%- include("../includes/sidebar.ejs") %>
 
-      <!-- Content Wrapper. Contains page content -->
-      <div class="content-wrapper">
-        <div class="content-header">
-          <div class="container-fluid">
-            <div class="row mb-2">
-              <div class="col-sm-6">
-                <h1 class="m-0">Dashboard v2</h1>
-              </div>
-              <!-- /.col -->
-              <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                  <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item active">Dashboard v2</li>
-                </ol>
-              </div>
-              <!-- /.col -->
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Dashboard v2</h1>
             </div>
-            <!-- /.row -->
+            <!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard v2</li>
+              </ol>
+            </div>
+            <!-- /.col -->
           </div>
-          <!-- /.container-fluid -->
+          <!-- /.row -->
         </div>
-
-        <!-- Main content -->
-        <section class="content">
-          <div class="container-fluid">
-            <!-- Info boxes -->
-            <div class="row">
-              <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box">
-                  <span class="info-box-icon bg-info elevation-1"
-                    ><i class="fas fa-cog"></i
-                  ></span>
-
-                  <div class="info-box-content">
-                    <span class="info-box-text">CPU Traffic</span>
-                    <span class="info-box-number">
-                      10
-                      <small>%</small>
-                    </span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-              <!-- /.col -->
-              <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                  <span class="info-box-icon bg-danger elevation-1"
-                    ><i class="fas fa-thumbs-up"></i
-                  ></span>
-
-                  <div class="info-box-content">
-                    <span class="info-box-text">Likes</span>
-                    <span class="info-box-number">41,410</span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-              <!-- /.col -->
-
-              <!-- fix for small devices only -->
-              <div class="clearfix hidden-md-up"></div>
-
-              <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                  <span class="info-box-icon bg-success elevation-1"
-                    ><i class="fas fa-shopping-cart"></i
-                  ></span>
-
-                  <div class="info-box-content">
-                    <span class="info-box-text">Sales</span>
-                    <span class="info-box-number">760</span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-              <!-- /.col -->
-              <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                  <span class="info-box-icon bg-warning elevation-1"
-                    ><i class="fas fa-users"></i
-                  ></span>
-
-                  <div class="info-box-content">
-                    <span class="info-box-text">New Members</span>
-                    <span class="info-box-number">2,000</span>
-                  </div>
-                  <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-              </div>
-              <!-- /.col -->
-            </div>
-            <!-- /.row -->
-          </div>
-          <!--/. container-fluid -->
-        </section>
+        <!-- /.container-fluid -->
       </div>
 
-      <!-- Control Sidebar -->
-      <aside class="control-sidebar control-sidebar-dark"></aside>
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <!-- Info boxes -->
+          <div class="row">
 
-      <%- include("../includes/footer.ejs") %>
-  </body>
-</html>
+            <!-- All Users -->
+            <div class="col-12 col-sm-6 col-md-3">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Users</span>
+                  <span class="info-box-number"><%= users %></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- All Categories -->
+            <div class="col-12 col-sm-6 col-md-3">
+              <div class="info-box">
+                <span class="info-box-icon bg-info elevation-1"><i class="fa fa-list-alt"></i></span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Categories</span>
+                  <span class="info-box-number">
+                    <%= categories %>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- All Products -->
+            <div class="col-12 col-sm-6 col-md-3">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-shopping-bag"></i></span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Products</span>
+                  <span class="info-box-number"><%= products %></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Total Income -->
+            <div class="clearfix hidden-md-up"></div>
+
+            <div class="col-12 col-sm-6 col-md-3">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-success elevation-1"><i class="fas fa-dollar-sign"></i></span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">Total Income</span>
+                  <span class="info-box-number"><%= totalIncome %></span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="control-sidebar control-sidebar-dark"></aside>
+
+    <%- include("../includes/footer.ejs") %>
+      </body>
+
+      </html>

@@ -399,7 +399,7 @@ $(document).ready(function () {
                 required: "Discount name is required",
             },
             type: {
-                required: "Type is requied",
+                required: "Type is required",
             },
             value: {
                 required: "Value is required",
