@@ -24,6 +24,7 @@ const payment = async (req, res) => {
 
     try {
         const response = await razorpay.orders.create(options);
+        console.log(response);
         res.json({
             order_id: response.id,
             currency: response.currency,
@@ -66,14 +67,14 @@ const generateInvoice = async (req, res) => {
 
         // Send the invoice ID in the response
         return res.json({
-            success: true,
+            status: true,
             message: "Invoice generated successfully.",
             invoiceId: invoiceId
         });
     }
 
     return res.json({
-        success: false,
+        status: false,
         message: "Payment data not found.",
     });
 };
