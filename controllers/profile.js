@@ -360,6 +360,51 @@ const meAPI = async (req, res) => {
 }
 
 
+
+// Update Profile API
+const updateProfileAPI = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { fullName, email } = req.body;
+
+        // Find the user by ID
+        const user = await Users.findOne({ where: { id: userId } });
+        if (!user) {
+            return res.json({
+                status: false,
+                message: "User not found"
+            });
+        }
+
+        // Update user details
+        user.fullName = fullName || user.fullName;
+        user.email = email || user.email;
+
+        // If a new image is uploaded, update the image path
+        if (req.file) {
+            user.image = req.file.path;
+        }
+
+        // Save the changes
+        await user.save();
+
+        return res.json({
+            status: true,
+            message: 'Profile updated successfully',
+            user,
+        });
+    } catch (error) {
+        return res.json({
+            status: false,
+            message: "Error in Update Profile",
+            error: error.message
+        });
+    }
+};
+
+
+
+
 module.exports = {
 
     profile,
@@ -376,4 +421,6 @@ module.exports = {
     postAddressAPI,
     deleteAddressAPI,
     meAPI,
+
+    updateProfileAPI,
 }

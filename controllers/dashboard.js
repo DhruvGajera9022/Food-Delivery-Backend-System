@@ -96,6 +96,50 @@ const logout = async (req, res) => {
 
 
 
+// Change Password API
+const changePasswordAPI = async (req, res) => {
+    try {
+        const userId = req.userId;
+        let { password, confirmPassword } = req.body;
+
+        if (!password || !confirmPassword) {
+            res.json({
+                status: false,
+                message: "Please provide all fields",
+            });
+        }
+
+        if (password !== confirmPassword) {
+            res.json({
+                status: false,
+                message: "Password and Confirm Password must be same",
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
+
+        const isPasswordChanged = await Users.update({
+            password: hashedPassword
+        }, { where: { id: userId } });
+
+
+        if (isPasswordChanged > 0) {
+            res.json({
+                status: true,
+                message: "Password changed successfully"
+            });
+        }
+
+    } catch (error) {
+        res.json({
+            status: false,
+            message: "Error in Change Password",
+        })
+    }
+}
+
+
+
 module.exports = {
     dashboard,
 
@@ -105,4 +149,6 @@ module.exports = {
     getLoggedInUserData,
 
     logout,
+
+    changePasswordAPI,
 }

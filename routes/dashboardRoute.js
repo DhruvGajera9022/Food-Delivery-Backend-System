@@ -4,6 +4,7 @@ const router = express.Router();
 const dashboardController = require("../controllers/dashboard");
 
 const Middleware = require("../middlewares/auth_middleware");
+const JWTMiddleware = require("../middlewares/jwt_token");
 
 
 // Dashboard route
@@ -14,6 +15,10 @@ router.get("/getData", Middleware.authenticate, dashboardController.getLoggedInU
 
 // Logout route
 router.get("/user_logout", dashboardController.logout);
+
+
+// API
+router.post("/api/changePassword/:id", Middleware.authenticate, JWTMiddleware.JWTMiddleware, dashboardController.changePasswordAPI);
 
 
 module.exports = router
