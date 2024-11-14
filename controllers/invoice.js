@@ -1,5 +1,7 @@
 const Invoice = require("../models/invoice");
 const InvoiceDetails = require("../models/invoice_detail");
+const Discount = require("../models/discount");
+const Products = require("../models/products");
 
 
 
@@ -64,9 +66,10 @@ const allInvoices = async (req, res) => {
 const singleInvoice = async (req, res) => {
     try {
         const invoiceId = req.params.id;
+        const baseURL = `${process.env.URL}${process.env.PORT}`;
 
         // Fetch the invoice by its ID
-        const invoice = await Invoice.findOne({ where: { id: invoiceId } });
+        let invoice = await Invoice.findOne({ where: { id: invoiceId } });
 
         // If invoice is not found
         if (!invoice) {
@@ -76,12 +79,42 @@ const singleInvoice = async (req, res) => {
             });
         }
 
+        // Fetch the discount associated with the invoice
+        const discount = await Discount.findOne({ where: { id: invoice.discount_id } });
+
+        // Map the invoice data to the desired structure
+        invoice = {
+            id: invoice.id,
+            transaction_id: invoice.transaction_id,
+            discount: discount ? discount.name : null,
+            order_date: invoice.order_date,
+            total_amount: invoice.total_amount,
+            discount_amount: invoice.discount_amount,
+            received_amount: invoice.received_amount,
+            status: invoice.status,
+            extra: invoice.extra,
+        };
+
         // Fetch the invoice details for the invoice
         const invoiceDetails = await InvoiceDetails.findAll({ where: { invoice_id: invoiceId } });
 
-        res.json({
+        // Map invoice details to include product details
+        const formattedInvoiceDetails = await Promise.all(invoiceDetails.map(async (product) => {
+            const products = await Products.findOne({ where: { id: product.product_id } });
+            return {
+                invoice_id: product.invoice_id,
+                product: {
+                    name: products.name,
+                    image: `${baseURL}/img/productImages/${products.image}`,
+                },
+                qty: product.qty,
+                price: product.price,
+            };
+        }));
+
+        return res.json({
             status: true,
-            invoice: { invoice, invoiceDetails },
+            invoice: { invoice, invoiceDetails: formattedInvoiceDetails },
         });
 
     } catch (error) {
@@ -90,7 +123,9 @@ const singleInvoice = async (req, res) => {
             message: "Error in single invoice API",
         });
     }
-}
+};
+
+
 
 
 
