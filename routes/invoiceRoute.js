@@ -14,8 +14,8 @@ router.post("/invoice_delete/:id", invoiceController.deleteInvoice);
 
 
 // API
-router.get("/api/invoice", Middleware.authenticate, JWTMiddleware.JWTMiddleware, invoiceController.allInvoices);
-router.get("/api/invoice/:id", Middleware.authenticate, JWTMiddleware.JWTMiddleware, invoiceController.singleInvoice);
+router.get("/api/invoice", JWTMiddleware.JWTMiddleware, invoiceController.allInvoices);
+router.get("/api/invoice/:id", JWTMiddleware.JWTMiddleware, invoiceController.singleInvoice);
 
 
 module.exports = router;

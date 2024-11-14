@@ -24,7 +24,7 @@ const payment = async (req, res) => {
 
     try {
         const response = await razorpay.orders.create(options);
-        console.log(response);
+        // console.log(response);
         res.json({
             order_id: response.id,
             currency: response.currency,
@@ -44,7 +44,7 @@ const generateInvoice = async (req, res) => {
     // console.log("Payment Data: ", paymentData);
 
     const paymentAllData = await razorpay.payments.fetch(paymentData.payment_id);
-    console.log("Payment Data:", paymentAllData);
+    // console.log("Payment Data:", paymentAllData);
 
     const status = paymentAllData.captured ? 1 : 0;
 
