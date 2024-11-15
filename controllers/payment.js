@@ -3,6 +3,7 @@ require("dotenv").config();
 const Invoice = require("../models/invoice");
 const productModel = require("../models/products");
 const invoiceDetailsModel = require("../models/invoice_detail");
+const Address = require("../models/address");
 
 
 // Razorpay key and secret
@@ -40,11 +41,17 @@ const payment = async (req, res) => {
 const generateInvoice = async (req, res) => {
     const paymentData = req.body;
     const cartItems = paymentData.cartItems;
+    const address_id = paymentData.address_id;
 
     // console.log("Payment Data: ", paymentData);
 
     const paymentAllData = await razorpay.payments.fetch(paymentData.payment_id);
     // console.log("Payment Data:", paymentAllData);
+
+    // Fetch selected address
+    const address = await Address.findOne({ where: { id: address_id } });
+
+    const addressString = `${address.no}, ${address.street}, ${address.landMark}, ${address.city}, ${address.state}, ${address.country}-${address.zipCode}`;
 
     const status = paymentAllData.captured ? 1 : 0;
 
@@ -56,6 +63,7 @@ const generateInvoice = async (req, res) => {
             order_date: new Date(),
             total_amount: paymentAllData.amount / 100,
             status,
+            address: addressString
         });
 
         console.log("Invoice generated.");

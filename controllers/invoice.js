@@ -70,32 +70,30 @@ const singleInvoice = async (req, res) => {
         const baseURL = `${process.env.URL}${process.env.PORT}`;
 
         // Fetch the invoice by its ID
-        let invoice = await Invoice.findOne({ where: { id: invoiceId } });
+        const invoiceData = await Invoice.findOne({ where: { id: invoiceId } });
 
         // If invoice is not found
-        if (!invoice) {
-            return res.json({
+        if (!invoiceData) {
+            return res.status(404).json({
                 status: false,
                 message: "Invoice not found",
             });
         }
 
-        const address = await Address.findOne({ where: { user_Id: invoice.user_id, isDefault: true } });
-
         // Fetch the discount associated with the invoice
-        const discount = await Discount.findOne({ where: { id: invoice.discount_id } });
+        const discount = await Discount.findOne({ where: { id: invoiceData.discount_id } });
 
-        // Map the invoice data to the desired structure
-        invoice = {
-            id: invoice.id,
-            transaction_id: invoice.transaction_id,
+        // Format the invoice data
+        const formattedInvoice = {
+            id: invoiceData.id,
+            transaction_id: invoiceData.transaction_id,
             discount: discount ? discount.name : null,
-            order_date: invoice.order_date,
-            total_amount: invoice.total_amount,
-            discount_amount: invoice.discount_amount,
-            received_amount: invoice.received_amount,
-            status: invoice.status,
-            extra: invoice.extra,
+            order_date: invoiceData.order_date,
+            total_amount: invoiceData.total_amount,
+            discount_amount: invoiceData.discount_amount,
+            received_amount: invoiceData.received_amount,
+            status: invoiceData.status,
+            extra: invoiceData.extra,
         };
 
         // Fetch the invoice details for the invoice
@@ -115,12 +113,13 @@ const singleInvoice = async (req, res) => {
             };
         }));
 
+        // Return the formatted response
         return res.json({
             status: true,
             invoice: {
-                invoice,
+                ...formattedInvoice,
                 invoiceDetails: formattedInvoiceDetails,
-                address: address
+                address: invoiceData.address,
             },
         });
 

@@ -32,9 +32,12 @@ const Invoice = sequelize.define("invoice", {
     status: {
         type: Sequelize.BOOLEAN,
     },
-    extra:{
+    address: {
         type: Sequelize.STRING,
-    }
+    },
+    extra: {
+        type: Sequelize.STRING,
+    },
 }, {
     timestamps: false,
     freezeTableName: true,
