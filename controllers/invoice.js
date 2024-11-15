@@ -2,6 +2,7 @@ const Invoice = require("../models/invoice");
 const InvoiceDetails = require("../models/invoice_detail");
 const Discount = require("../models/discount");
 const Products = require("../models/products");
+const Address = require("../models/address");
 
 
 
@@ -79,6 +80,8 @@ const singleInvoice = async (req, res) => {
             });
         }
 
+        const address = await Address.findOne({ where: { user_Id: invoice.user_id, isDefault: true } });
+
         // Fetch the discount associated with the invoice
         const discount = await Discount.findOne({ where: { id: invoice.discount_id } });
 
@@ -114,7 +117,11 @@ const singleInvoice = async (req, res) => {
 
         return res.json({
             status: true,
-            invoice: { invoice, invoiceDetails: formattedInvoiceDetails },
+            invoice: {
+                invoice,
+                invoiceDetails: formattedInvoiceDetails,
+                address: address
+            },
         });
 
     } catch (error) {
