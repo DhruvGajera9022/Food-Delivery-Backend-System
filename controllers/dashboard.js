@@ -103,14 +103,21 @@ const changePasswordAPI = async (req, res) => {
         let { password, confirmPassword } = req.body;
 
         if (!password || !confirmPassword) {
-            res.json({
+            return res.json({
                 status: false,
                 message: "Please provide all fields",
             });
         }
 
+        if (password.length < 6) {
+            return res.json({
+                status: false,
+                message: "Password must be 6 digits long",
+            });
+        }
+
         if (password !== confirmPassword) {
-            res.json({
+            return res.json({
                 status: false,
                 message: "Password and Confirm Password must be same",
             });
@@ -124,14 +131,14 @@ const changePasswordAPI = async (req, res) => {
 
 
         if (isPasswordChanged > 0) {
-            res.json({
+            return res.json({
                 status: true,
                 message: "Password changed successfully"
             });
         }
 
     } catch (error) {
-        res.json({
+        return res.json({
             status: false,
             message: "Error in Change Password",
         })

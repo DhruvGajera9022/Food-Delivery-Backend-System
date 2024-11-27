@@ -18,6 +18,9 @@ const invoiceDetailsRoute = require("./routes/invoiceDetailsRoute");
 const settingsRoute = require("./routes/settingsRoute");
 const paymentRoute = require("./routes/paymentRoute");
 
+const swaggerUI = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-output.json");
+
 // Initialize app
 const app = express();
 
@@ -63,6 +66,8 @@ app.use("/", invoiceRoute);
 app.use("/", invoiceDetailsRoute);
 app.use("/", settingsRoute);
 app.use("/", paymentRoute);
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 
 // start server

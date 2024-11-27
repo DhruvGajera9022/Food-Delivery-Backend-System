@@ -31,6 +31,9 @@ const editProfile = async (req, res) => {
     }
 
     const user = req.session.user;
+
+    const role = await Users.findOne({ where: { id: user.id } });
+
     const { fullname, email, number, gender, dob, hobby, image_old } = req.body;
     let image = req.file ? req.file.filename : image_old;
 
@@ -45,7 +48,7 @@ const editProfile = async (req, res) => {
     let userData = {
         fullName: fullname,
         image: image,
-        role: user.role
+        role: role.role
     }
 
     const rowsUpdated = await Users.update(

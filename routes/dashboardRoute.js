@@ -18,7 +18,7 @@ router.get("/user_logout", dashboardController.logout);
 
 
 // API
-router.post("/api/changePassword/:id", Middleware.authenticate, JWTMiddleware.JWTMiddleware, dashboardController.changePasswordAPI);
+router.post("/api/changePassword", JWTMiddleware.JWTMiddleware, dashboardController.changePasswordAPI);
 
 
 module.exports = router
