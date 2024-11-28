@@ -75,4 +75,6 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 // start server
 app.listen(process.env.PORT, () => {
     console.log(`Server started at ${process.env.URL}${process.env.PORT}`);
+    console.log(`Swagger Docs at ${process.env.URL}${process.env.PORT}/api-docs`);
+
 });
