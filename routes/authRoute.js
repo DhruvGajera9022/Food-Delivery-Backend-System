@@ -55,6 +55,8 @@ router.post("/recover_password/:id", authController.validatePasswordChange, auth
 router.post("/api/login", authController.loginAPI);
 router.post("/api/register", authController.validateRegistration, authController.registerAPI);
 
+router.get("/verify-email", authController.verifiedEmail);
+
 
 
 module.exports = router;

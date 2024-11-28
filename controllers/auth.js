@@ -4,7 +4,10 @@ require("dotenv").config();
 const { check, validationResult } = require('express-validator');
 const JWT = require("jsonwebtoken");
 require("../passport");
+const sgMail = require("@sendgrid/mail");
+const crypto = require("crypto");
 
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
 // To display login page
@@ -364,63 +367,122 @@ const loginAPI = async (req, res) => {
 };
 // API for registration
 const registerAPI = async (req, res) => {
-    const errorMsg = [];
-    const errors = validationResult(req);
+    try {
+        const errorMsg = [];
+        const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-        errors.array().forEach(err => {
-            errorMsg.push({
-                param: err.param,
-                msg: err.msg,
-                value: err.value,
-                path: err.path,
+        if (!errors.isEmpty()) {
+            errors.array().forEach((err) => {
+                errorMsg.push({
+                    param: err.param,
+                    msg: err.msg,
+                    value: err.value,
+                    path: err.path,
+                });
             });
-        });
+
+            return res.json({
+                status: false,
+                message: errorMsg,
+            });
+        }
+
+        let { fullname, email, password } = req.body;
+
+        const existingUser = await Users.findOne({ where: { email } });
+        if (existingUser) {
+            errorMsg.push({
+                param: "email",
+                msg: "User with this email already exists.",
+                value: email,
+                path: "email",
+            });
+        }
+
+        if (errorMsg.length == 0) {
+            const hashedPassword = await bcrypt.hash(
+                password,
+                parseInt(process.env.SALT)
+            );
+
+            const emailToken = crypto.randomBytes(64).toString("hex");
+
+            const isUserCreated = await Users.create({
+                fullName: fullname,
+                email: email,
+                password: hashedPassword,
+                emailToken: emailToken,
+                isVerified: false,
+            });
+
+            // Send verification email
+            const verificationURL = `${process.env.URL}${process.env.PORT}/verify-email?emailToken=${emailToken}`;
+            const msg = {
+                from: {
+                    name: "Netflix-Project",
+                    email: "dhruvgajera05@gmail.com",
+                },
+                to: email,
+                subject: "Netflix-Project - Verify Your Email",
+                text: `Hello, thanks for registering on our site. Please verify your account: ${verificationURL}`,
+                html: `
+                    <h1>Hello,</h1>
+                    <p>Thanks for registering on our site.</p>
+                    <p>Please click the link below to verify your account:</p>
+                    <a href="${verificationURL}">Verify Your Account</a>
+                `,
+            };
+            await sgMail.send(msg);
+
+            // Respond to the client
+            return res.status(201).json({
+                status: true,
+                message: "Thanks for registering. Please check your email to verify your account.",
+            });
+        }
 
         return res.json({
+            status: errorMsg.length > 0 ? false : true,
+            message: errorMsg.length > 0 ? errorMsg : "Registration successfully",
+        });
+    } catch (error) {
+        res.json({
             status: false,
-            message: errorMsg,
-        });
+            message: "Error in Register API"
+        })
     }
+};
+// Verify Email
+const verifiedEmail = async (req, res) => {
+    try {
 
-    let { fullname, email, password } = req.body;
+        const { emailToken } = req.query;
 
-    const existingUser = await Users.findOne({ where: { email } });
-    if (existingUser) {
-        errorMsg.push({
-            param: "email",
-            msg: "User with this email already exists.",
-            value: email,
-            path: 'email',
-        });
-    }
-
-    if (errorMsg.length == 0) {
-        const hashedPassword = await bcrypt.hash(password, parseInt(process.env.SALT));
-
-        const isUserCreated = await Users.create({
-            fullName: fullname,
-            email: email,
-            password: hashedPassword,
-        });
-
-        if (isUserCreated) {
-            message: "Registration successfull"
-        } /*else {
-            errorMsg.push({
-                param: "registration",
-                msg: "User registration failed.",
-                value: null,
-                path: 'registration',
+        // Find the user by email token
+        const user = await Users.findOne({ where: { emailToken } });
+        if (!user) {
+            return res.json({
+                status: false,
+                message: "Invalid or expired email token.",
             });
-        }*/
-    }
+        }
 
-    return res.json({
-        status: errorMsg.length > 0 ? false : true,
-        message: errorMsg.length > 0 ? errorMsg : 'Registration successfull'
-    });
-}
+        // Update user verification status
+        user.emailToken = null;
+        user.isVerified = true;
+        await user.save();
+
+        res.json({
+            status: true,
+            message: "Email verified successfully.",
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            message: "Error in check Email Token",
+        });
+    }
+};
 
 
 
@@ -438,6 +500,7 @@ module.exports = {
     validateRegistration,
 
     registerAPI,
+    verifiedEmail,
 
     forgotPassword,
     checkEmail,
