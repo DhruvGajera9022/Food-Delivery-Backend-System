@@ -121,7 +121,7 @@
 
     "/api/changePassword": {
       "post": {
-        "tags": ["Authorization"],
+        "tags": ["User Profile"],
         "description": "Change the password for the authenticated user.",
         "parameters": [
           {
