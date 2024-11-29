@@ -3,6 +3,7 @@ const InvoiceDetails = require("../models/invoice_detail");
 const Discount = require("../models/discount");
 const Products = require("../models/products");
 const Address = require("../models/address");
+const User = require("../models/user");
 
 
 
@@ -80,8 +81,13 @@ const singleInvoice = async (req, res) => {
             });
         }
 
+        const userData = await User.findOne({ where: { id: invoiceData.user_id } });
+        const addressData = await Address.findOne({ where: { id: invoiceData.address } });
+
         // Fetch the discount associated with the invoice
         const discount = await Discount.findOne({ where: { id: invoiceData.discount_id } });
+
+        const addressType = invoiceData['address'].split(",")[0].trim();
 
         // Format the invoice data
         const formattedInvoice = {
@@ -94,6 +100,9 @@ const singleInvoice = async (req, res) => {
             received_amount: invoiceData.received_amount,
             status: invoiceData.status,
             extra: invoiceData.extra,
+            fullName: userData.fullName,
+            number: userData.number,
+            type: addressType,
         };
 
         // Fetch the invoice details for the invoice
