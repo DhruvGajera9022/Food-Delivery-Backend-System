@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 const { check, validationResult } = require('express-validator');
 require("dotenv").config();
@@ -369,6 +370,7 @@ const updateProfileAPI = async (req, res) => {
     try {
         const userId = req.userId;
         const { fullName, email } = req.body;
+        let baseURL = `${process.env.URL}${process.env.PORT}`;
 
         // Find the user by ID
         const user = await Users.findOne({ where: { id: userId } });
@@ -385,16 +387,39 @@ const updateProfileAPI = async (req, res) => {
 
         // If a new image is uploaded, update the image path
         if (req.file) {
-            user.image = req.file.path;
+            const oldImagePath = user.image ? path.join(__dirname, '../assets/img/userImages/', user.image) : null;
+
+            // Delete old image if it exists
+            if (oldImagePath && fs.existsSync(oldImagePath)) {
+                fs.unlinkSync(oldImagePath);
+            }
+
+            // Set new image path
+            user.image = req.file.filename;
         }
 
         // Save the changes
         await user.save();
 
+        // Prepare response object
+        const updatedUser = {
+            id: user.id,
+            fullName: user.fullName,
+            email: user.email,
+            number: user.number,
+            gender: user.gender,
+            dob: user.dob,
+            hobbies: user.hobbies,
+            image: `${baseURL}/img/userImages/${user.image}`,
+            role: user.role,
+            emailToken: user.emailToken,
+            isVerified: user.isVerified,
+        };
+
         return res.json({
             status: true,
             message: 'Profile updated successfully',
-            user,
+            user: updatedUser,
         });
     } catch (error) {
         return res.json({
