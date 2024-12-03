@@ -51,7 +51,7 @@ const generateInvoice = async (req, res) => {
     // Fetch selected address
     const address = await Address.findOne({ where: { id: address_id } });
 
-    const addressString = `${address.type},${address.no}, ${address.street}, ${address.landMark}, ${address.city}, ${address.state}, ${address.country}-${address.zipCode}`;
+    const addressString = `${address.fullName}, ${address.number}, ${address.type},${address.no}, ${address.street}, ${address.landMark}, ${address.city}, ${address.state}, ${address.country}-${address.zipCode}`;
 
     const status = paymentAllData.captured ? 1 : 0;
 
