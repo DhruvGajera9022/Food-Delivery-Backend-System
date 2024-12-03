@@ -36,7 +36,7 @@ const allInvoices = async (req, res) => {
 
         if (!allInvoices) {
             res.json({
-                status: true,
+                status: false,
                 message: "No invoice available",
             });
         }
@@ -44,8 +44,18 @@ const allInvoices = async (req, res) => {
         // Fetch the details of each invoice and attach it to the invoice
         const invoicesWithDetails = await Promise.all(allInvoices.map(async (invoice) => {
             const invoiceDetails = await InvoiceDetails.findAll({ where: { invoice_id: invoice.id } });
-            invoice.dataValues.details = invoiceDetails;
-            return invoice;
+            return {
+                id: invoice.id,
+                transaction_id: invoice.transaction_id,
+                discount: invoice.discount,
+                order_date: invoice.order_date,
+                total_amount: invoice.total_amount,
+                discount_amount: invoice.discount_amount,
+                received_amount: invoice.received_amount,
+                status: invoice.status,
+                extra: invoice.extra,
+                details: invoiceDetails,
+            };
         }));
 
         res.json({
@@ -81,13 +91,8 @@ const singleInvoice = async (req, res) => {
             });
         }
 
-        const userData = await User.findOne({ where: { id: invoiceData.user_id } });
-        const addressData = await Address.findOne({ where: { id: invoiceData.address } });
-
         // Fetch the discount associated with the invoice
         const discount = await Discount.findOne({ where: { id: invoiceData.discount_id } });
-
-        const addressType = invoiceData['address'].split(",")[0].trim();
 
         // Format the invoice data
         const formattedInvoice = {
@@ -100,9 +105,6 @@ const singleInvoice = async (req, res) => {
             received_amount: invoiceData.received_amount,
             status: invoiceData.status,
             extra: invoiceData.extra,
-            fullName: userData.fullName,
-            number: userData.number,
-            type: addressType,
         };
 
         // Fetch the invoice details for the invoice
@@ -122,13 +124,20 @@ const singleInvoice = async (req, res) => {
             };
         }));
 
+        const invoiceAddress = {
+            fullName: invoiceData.address.split(", ")[0],
+            number: invoiceData.address.split(", ")[1],
+            type: invoiceData.address.split(", ")[2],
+            address: invoiceData.address.split(", ").slice(3).join(", "),
+        }
+
         // Return the formatted response
         return res.json({
             status: true,
             invoice: {
                 ...formattedInvoice,
                 invoiceDetails: formattedInvoiceDetails,
-                address: invoiceData.address,
+                address: invoiceAddress,
             },
         });
 
