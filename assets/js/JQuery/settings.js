@@ -11,8 +11,7 @@
             success: function (settings) {
                 $('#settings-grid').empty();
 
-                settings.forEach(function (setting) {
-                    var settingHtml = `
+                var settingHtml = `
                     <div class="col-md-4">
                         <div class="card mb-3 shadow-sm">
                             <div class="d-flex justify-content-between">
@@ -52,8 +51,7 @@
                         </div>
                     </div>`;
 
-                    $('#settings-grid').append(settingHtml);
-                });
+                $('#settings-grid').append(settingHtml);
             },
             error: function (error) {
                 console.error("Error fetching settings", error);
@@ -62,5 +60,5 @@
     }
 
 
-    
+
 </script>

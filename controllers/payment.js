@@ -46,7 +46,7 @@ const generateInvoice = async (req, res) => {
     // console.log("Payment Data: ", paymentData);
 
     const paymentAllData = await razorpay.payments.fetch(paymentData.payment_id);
-    // console.log("Payment Data:", paymentAllData);
+    console.log("Payment Data:", paymentAllData);
 
     // Fetch selected address
     const address = await Address.findOne({ where: { id: address_id } });
