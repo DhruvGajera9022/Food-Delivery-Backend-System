@@ -352,7 +352,8 @@ const meAPI = async (req, res) => {
     };
 
     const invoice = await Invoice.findAll({
-        where: { user_id: req.userId }
+        where: { user_id: req.userId },
+        order: [['id', 'DESC']]
     });
 
     return res.json({
