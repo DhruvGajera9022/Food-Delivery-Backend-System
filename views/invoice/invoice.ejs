@@ -21,6 +21,7 @@
                         <table id="inovicetable" class="table table-dark table-striped table-bordered table-hover">
                           <thead>
                             <tr>
+                              <th>ID</th>
                               <th>User Id</th>
                               <th>Transaction Id</th>
                               <th>Discount</th>
@@ -35,6 +36,9 @@
                           <tbody>
                             <% allData.forEach(data=> { %>
                               <tr>
+                                <td>
+                                  <%= data.id %>
+                                </td>
                                 <td>
                                   <%= data.user_id %>
                                 </td>

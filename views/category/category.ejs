@@ -26,6 +26,7 @@
                                                     class="table table-dark table-striped table-bordered table-hover">
                                                     <thead>
                                                         <tr>
+                                                            <th>ID</th>
                                                             <th>Image</th>
                                                             <th>Name</th>
                                                             <th>Active</th>
@@ -35,6 +36,9 @@
                                                     <tbody>
                                                         <% allData.forEach(data=> { %>
                                                             <tr>
+                                                                <td>
+                                                                    <%= data.id %>
+                                                                </td>
                                                                 <td>
                                                                     <img src="img/categoryImages/<%= data.image %>" alt="Category" height="40px" width="40px">
                                                                 </td>

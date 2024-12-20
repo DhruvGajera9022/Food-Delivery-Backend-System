@@ -1,37 +1,37 @@
 $(document).ready(function () {
     $("#userstable").dataTable({
         order: [],
-        columnDefs: [{ orderable: false, targets: [0, 7] }]
+        columnDefs: [{ orderable: false, targets: [1, 8] }]
     });
 
     $("#roletable").dataTable({
         order: [],
-        columnDefs: [{ orderable: false, targets: [2] }]
+        columnDefs: [{ orderable: false, targets: [3] }]
     })
 
     $("#categorytable").dataTable({
         order: [],
-        columnDefs: [{ orderable: false, targets: [0, 3] }]
+        columnDefs: [{ orderable: false, targets: [1, 4] }]
     })
 
     $("#productstable").dataTable({
         order: [],
-        columnDefs: [{ orderable: false, targets: [0, 6] }]
+        columnDefs: [{ orderable: false, targets: [1, 7] }]
     })
 
     $("#inovicetable").dataTable({
         order: [],
-        columnDefs: [{ orderable: false, targets: [8] }]
+        columnDefs: [{ orderable: false, targets: [9] }]
     });
 
     $("#discounttable").dataTable({
         order: [],
-        columnDefs: [{ orderable: false, targets: [0, 7] }]
+        columnDefs: [{ orderable: false, targets: [1, 8] }]
     });
 
     $("#inovicedetailstable").dataTable({
         order: [],
-        columnDefs: [{ orderable: false, targets: [0] }]
+        columnDefs: [{ orderable: false, targets: [1] }]
     });
 
 
