@@ -159,7 +159,6 @@ const productsAPI = async (req, res) => {
             ['id', 'DESC']
         ]
     });
-    let baseURL = `${process.env.URL}${process.env.PORT}`;
 
     products = products.filter(products => products.isActive);
 
@@ -171,7 +170,7 @@ const productsAPI = async (req, res) => {
             price: product.price,
             description: product.description,
             rating: product.rating,
-            image: `${baseURL}/img/productImages/${product.image}`
+            image: `${process.env.URL}/img/productImages/${product.image}`
         }
     });
 

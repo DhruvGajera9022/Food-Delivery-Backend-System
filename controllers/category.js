@@ -133,7 +133,6 @@ const getAllCategory = async () => {
 // API category
 const categoriesAPI = async (req, res) => {
     let categories = await getAllCategory();
-    let baseURL = `${process.env.URL}${process.env.PORT}`;
 
     categories = categories.filter(category => category.isActive);
 
@@ -141,7 +140,7 @@ const categoriesAPI = async (req, res) => {
         return {
             id: category.id,
             menu_name: category.name,
-            menu_image: `${baseURL}/img/categoryImages/${category.image}`
+            menu_image: `${process.env.URL}/img/categoryImages/${category.image}`
         }
     });
 

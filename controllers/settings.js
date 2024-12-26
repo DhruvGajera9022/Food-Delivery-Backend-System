@@ -131,7 +131,6 @@ const getSettings = async (req, res) => {
 // get API for settings
 const settingsAPI = async (req, res) => {
     let settings = await getAllSettings();
-    let baseURL = `${process.env.URL}${process.env.PORT}`;
 
     const settingObject = {
         id: settings.id,
@@ -146,7 +145,7 @@ const settingsAPI = async (req, res) => {
         description: settings.description,
         privacy_policy: settings.privacy_policy,
         term_condition: settings.term_condition,
-        logo: `${baseURL}/img/settingImages/${settings.logo}`,
+        logo: `${process.env.URL}/img/settingImages/${settings.logo}`,
     }
 
     return res.json({

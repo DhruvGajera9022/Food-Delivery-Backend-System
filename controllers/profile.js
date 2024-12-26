@@ -334,7 +334,6 @@ const deleteAddressAPI = async (req, res) => {
 // get API for all data of current user
 const meAPI = async (req, res) => {
     const userData = await Users.findOne({ where: { id: req.userId } });
-    let baseURL = `${process.env.URL}${process.env.PORT}`;
 
     let addresses = await Address.findAll({
         order: [
@@ -348,7 +347,7 @@ const meAPI = async (req, res) => {
         fullName: userData.fullName,
         email: userData.email,
         number: userData.number,
-        image: `${baseURL}/img/userImages/${userData.image}`,
+        image: `${process.env.URL}/img/userImages/${userData.image}`,
     };
 
     const invoice = await Invoice.findAll({
@@ -371,7 +370,6 @@ const updateProfileAPI = async (req, res) => {
     try {
         const userId = req.userId;
         const { fullName, email } = req.body;
-        let baseURL = `${process.env.URL}${process.env.PORT}`;
 
         // Find the user by ID
         const user = await Users.findOne({ where: { id: userId } });
@@ -411,7 +409,7 @@ const updateProfileAPI = async (req, res) => {
             gender: user.gender,
             dob: user.dob,
             hobbies: user.hobbies,
-            image: `${baseURL}/img/userImages/${user.image}`,
+            image: `${process.env.URL}/img/userImages/${user.image}`,
             role: user.role,
             emailToken: user.emailToken,
             isVerified: user.isVerified,

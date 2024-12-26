@@ -78,7 +78,6 @@ const allInvoices = async (req, res) => {
 const singleInvoice = async (req, res) => {
     try {
         const invoiceId = req.params.id;
-        const baseURL = `${process.env.URL}${process.env.PORT}`;
 
         // Fetch the invoice by its ID
         const invoiceData = await Invoice.findOne({ where: { id: invoiceId } });
@@ -117,7 +116,7 @@ const singleInvoice = async (req, res) => {
                 invoice_id: product.invoice_id,
                 product: {
                     name: products.name,
-                    image: `${baseURL}/img/productImages/${products.image}`,
+                    image: `${process.env.URL}/img/productImages/${products.image}`,
                 },
                 qty: product.qty,
                 price: product.price,
