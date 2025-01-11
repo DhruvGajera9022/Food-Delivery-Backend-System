@@ -1,10 +1,10 @@
-### Food Delivery Backend System
+# Food Delivery Backend System
 
 A comprehensive backend system for a food delivery service, built using Node.js, Express.js, MySQL, and with integrated authentication (via Passport.js) for Google and Facebook. This system provides key features such as user management, product management, invoice generation, role-based access control (RBAC), and more, designed to support a food delivery platform.
 
 ## Features
 
-# 1. Authentication
+## 1. Authentication
 
 - **User Registration**: Allows users to register via email/password.
 - **Login**: Users can log in with email/password or through Google/Facebook OAuth.
