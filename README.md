@@ -1,116 +1,63 @@
-# Node.js Application with MySQL and Authentication
+### Food Delivery Backend System
 
-This is a Node.js application using Express.js, Passport.js for authentication (Google and Facebook), and MySQL as the database. It supports registration, login, CRUD operations, and includes JWT-based APIs for various resources.
+A comprehensive backend system for a food delivery service, built using Node.js, Express.js, MySQL, and with integrated authentication (via Passport.js) for Google and Facebook. This system provides key features such as user management, product management, invoice generation, role-based access control (RBAC), and more, designed to support a food delivery platform.
 
-# Application Functionality Overview
+## Features
 
-This section details the core functionality provided by each module in the application.
+# 1. Authentication
 
-## 1. Authentication
-
-The authentication system supports:
-
-- **Registration**: Allows new users to sign up via the registration page or API endpoint.
-- **Login**: Users can log in with their email/password or through Google/Facebook OAuth.
-- **Social Authentication**: Users can authenticate via Google or Facebook.
-- **Session Management**: Sessions are managed using `express-session` with session persistence via `session-file-store`.
-- **JWT Tokens**: Some routes and APIs are protected by JWT middleware, providing token-based authentication for secure access.
+- **User Registration**: Allows users to register via email/password.
+- **Login**: Users can log in with email/password or through Google/Facebook OAuth.
+- **Session Management**: Uses express-session and stores sessions using session-file-store.
+- **JWT Authentication**: Token-based authentication for certain APIs.
 
 ## 2. User Management
 
-This module is designed to allow admins to manage user accounts:
-
-- **View Users**: Admins can view a list of all registered users.
-- **Add/Edit User**: Admins can add or edit user details.
-- **Delete User**: Admins can delete user accounts.
+- **Admin Control**: Admins can view, add, edit, and delete user accounts.
 
 ## 3. Role-Based Access Control (RBAC)
 
-Implemented to restrict or allow access based on user roles:
-
-- **Role Management**: Admins can create, edit, and delete roles.
-- **Role Assignment**: Roles are assigned to users, granting access to specific parts of the application.
+- **Role Management**: Admins can manage user roles (e.g., Admin, User, etc.).
+- **Role Assignment**: Users are assigned roles to access specific resources.
 
 ## 4. Category Management
 
-Allows admins to manage product categories:
-
-- **List Categories**: View all categories.
-- **Add/Edit Category**: Add new categories or update existing ones.
-- **Delete Category**: Remove categories from the system.
+Admins can manage product categories, including adding, editing, and deleting categories.
 
 ## 5. Product Management
 
-Product module enables admins to manage the product catalog:
-
-- **List Products**: View all available products.
-- **Add/Edit Product**: Add new products or update details of existing ones.
-- **Delete Product**: Remove products from the catalog.
-- **Image Upload**: Allows image uploads for product visualization.
+Admins can manage products by adding, editing, and deleting items in the catalog.
+Product image uploads for visual representation.
 
 ## 6. Discount Management
 
-Discounts can be managed by admins for promotions:
-
-- **View Discounts**: List all available discounts.
-- **Add/Edit Discount**: Create new discounts or edit existing ones.
-- **Delete Discount**: Remove discounts.
-- **Image Upload**: Allows upload of images associated with discounts.
+Admins can manage discount schemes, including creating, editing, and deleting discounts.
 
 ## 7. Profile Management
 
-Users can view and edit their profile information:
-
-- **View Profile**: Display user’s profile data.
-- **Edit Profile**: Update user information and upload profile images.
-- **Address Management**: Users can add, edit, or delete addresses associated with their profile.
+Users can view and edit their profile information, including updating address details.
 
 ## 8. Dashboard
 
-Main landing page for logged-in users, showing key information and navigation:
-
-- **Dashboard Data**: Displays basic user information and relevant data.
+The user dashboard displays key information, like user data and relevant navigation links.
 
 ## 9. Invoice Management
 
-Admin-managed module for invoice generation and tracking:
-
-- **View Invoices**: List of all invoices generated.
-- **Generate Invoice**: Generate invoices for transactions.
+Admins can generate and manage invoices, linked to user transactions.
 
 ## 10. Settings Management
 
-Allows admins to manage general application settings:
-
-- **View Settings**: Retrieve application settings.
-- **Edit Settings**: Update global settings for the application.
+Admins can edit global application settings.
 
 ## 11. Payment Integration
 
-Handles user payments and generates invoices for completed transactions:
+Handles checkout and payment processing.
+Generates invoices after successful payment.
 
-- **Checkout**: Process payments for purchases.
-- **Generate Invoice**: Create and store an invoice upon successful payment.
+## 12. API Endpoints
 
-## 12. APIs
-
-RESTful APIs available for integration with other services or frontend applications:
-
-- **Authentication APIs**:
-  - `/api/login`: Login via API.
-  - `/api/register`: Registration via API.
-- **Data APIs**:
-  - `/api/category`: Retrieve all categories.
-  - `/api/products`: Retrieve all products.
-  - `/api/address`: Get user address (JWT required).
-  - `/api/settings`: Retrieve application settings.
-  - `/api/discount`: Retrieve discounts.
-  - `/api/me`: Retrieve logged-in user details (JWT required).
-- **Address APIs**:
-  - **POST** `/api/address`: Add or update user address.
-  - **DELETE** `/api/delete/address/:id`: Delete an address.
-
-This functionality overview provides a detailed look at what each module offers and how it is structured to support the application's features.
+RESTful API endpoints for key actions like authentication, products, categories, and more.
+JWT is required for certain routes, ensuring secure data access.
 
 ## Prerequisites
 
@@ -123,8 +70,8 @@ Ensure you have the following installed:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/DhruvGajera9022/Node-Project.git
-   cd Node-Project
+   git clone https://github.com/DhruvGajera9022/Food-Delivery-Backend-System.git
+   cd Food-Delivery-Backend-System
    ```
 2. Install dependencies:
    ```bash
@@ -139,6 +86,34 @@ Ensure you have the following installed:
    ```
 
 5. Run the Server:
+
    ```bash
    npm start
    ```
+
+6. Access Swagger Documentation:
+   ```bash
+   http://localhost:3000/api-docs
+   ```
+
+## API Documentation
+
+- **Authentication Endpoints**:
+  - `/api/login` - Login via email/password
+  - `/api/register` - Register new users
+- **Profile & Address Endpoints**:
+  - `/api/me`: View user's all details
+  - `/api/editProfile`: Edit user's profile
+  - `/api/address`: Get user's addresses
+  - `/api/address`: Edit user's address
+  - `/api/delete/address/:id`: Delete user's address
+- **Product & Category Endpoints**:
+  - `/api/category`: Get all categories
+  - `/api/products`: Get all products
+- **Discount Management**:
+  - `/api/discount`: Get all discounts
+- **Invoice Management**:
+  - `/api/invoices`: Get all invoices
+  - `/api/invoices`: Generate new invoice
+- **Payment Endpoints**:
+  - `/api/checkout`: Process a payment
