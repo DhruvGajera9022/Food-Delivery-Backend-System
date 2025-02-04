@@ -1,119 +1,141 @@
 # Food Delivery Backend System
 
-A comprehensive backend system for a food delivery service, built using Node.js, Express.js, MySQL, and with integrated authentication (via Passport.js) for Google and Facebook. This system provides key features such as user management, product management, invoice generation, role-based access control (RBAC), and more, designed to support a food delivery platform.
+A comprehensive backend system for a food delivery service, built using **Node.js**, **Express.js**, and **MySQL**, with integrated authentication via **Passport.js** for Google and Facebook. This robust system supports key functionalities such as user management, product management, invoice generation, role-based access control (RBAC), payment integration, and more.
 
-## Features
+## 🚀 Features
 
-## 1. Authentication
+### 1. 🔐 Authentication
 
-- **User Registration**: Allows users to register via email/password.
-- **Login**: Users can log in with email/password or through Google/Facebook OAuth.
-- **Session Management**: Uses express-session and stores sessions using session-file-store.
-- **JWT Authentication**: Token-based authentication for certain APIs.
+- **User Registration:** Register via email/password.
+- **Login:** Log in with email/password or through Google/Facebook OAuth.
+- **Session Management:** Uses `express-session` with `session-file-store` for session persistence.
+- **JWT Authentication:** Secures specific APIs with token-based authentication.
 
-## 2. User Management
+### 2. 👥 User Management
 
-- **Admin Control**: Admins can view, add, edit, and delete user accounts.
+- **Admin Control:** Admins can view, add, edit, and delete user accounts.
+- **Profile Management:** Users can view and update personal information, including address details.
 
-## 3. Role-Based Access Control (RBAC)
+### 3. 🛡️ Role-Based Access Control (RBAC)
 
-- **Role Management**: Admins can manage user roles (e.g., Admin, User, etc.).
-- **Role Assignment**: Users are assigned roles to access specific resources.
+- **Role Management:** Admins can create, modify, and delete user roles (e.g., Admin, User).
+- **Role Assignment:** Grant specific access permissions based on assigned roles.
 
-## 4. Category Management
+### 4. 📂 Category Management
 
-Admins can manage product categories, including adding, editing, and deleting categories.
+- Manage product categories (add, edit, delete) for easy product organization.
 
-## 5. Product Management
+### 5. 🍔 Product Management
 
-Admins can manage products by adding, editing, and deleting items in the catalog.
-Product image uploads for visual representation.
+- Add, edit, and delete items in the product catalog.
+- Upload product images for better visual representation.
 
-## 6. Discount Management
+### 6. 💸 Discount Management
 
-Admins can manage discount schemes, including creating, editing, and deleting discounts.
+- Create, update, and delete discount schemes for promotional campaigns.
 
-## 7. Profile Management
+### 7. 📊 Dashboard
 
-Users can view and edit their profile information, including updating address details.
+- A user-friendly dashboard for admins to monitor system activity and key metrics.
 
-## 8. Dashboard
+### 8. 🧾 Invoice Management
 
-The user dashboard displays key information, like user data and relevant navigation links.
+- Generate, view, and manage invoices linked to user transactions.
 
-## 9. Invoice Management
+### 9. ⚙️ Settings Management
 
-Admins can generate and manage invoices, linked to user transactions.
+- Admins can configure and update global application settings.
 
-## 10. Settings Management
+### 10. 💳 Payment Integration
 
-Admins can edit global application settings.
+- Seamlessly handle checkout processes and payment transactions.
+- Auto-generate invoices upon successful payment.
 
-## 11. Payment Integration
+### 11. 🌐 RESTful API Endpoints
 
-Handles checkout and payment processing.
-Generates invoices after successful payment.
+- Secure, well-structured endpoints with JWT protection for sensitive data.
 
-## 12. API Endpoints
-
-RESTful API endpoints for key actions like authentication, products, categories, and more.
-JWT is required for certain routes, ensuring secure data access.
-
-## Prerequisites
+## 🗒️ Prerequisites
 
 Ensure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (v14+ recommended)
-- [MySQL](https://www.mysql.com/) for database
+- [MySQL](https://www.mysql.com/) (for the database)
 
-## Installation
+## ⚙️ Installation Guide
 
-1. Clone the repository:
+1. **Clone the Repository:**
    ```bash
    git clone https://github.com/DhruvGajera9022/Food-Delivery-Backend-System.git
    cd Food-Delivery-Backend-System
    ```
-2. Install dependencies:
+
+2. **Install Dependencies:**
    ```bash
    npm install
    ```
-3. Set up the environment variables.
 
-4. For create Database in MySql:
+3. **Environment Configuration:**
+   - Create a `.env` file and set up the necessary environment variables.
 
+4. **Database Setup:**
    ```bash
    npx sequelize-cli db:migrate
    ```
 
-5. Run the Server:
-
+5. **Start the Server:**
    ```bash
    npm start
    ```
 
-6. Access Swagger Documentation:
-   ```bash
-   http://localhost:3000/api-docs
-   ```
+6. **API Documentation:**
+   - Access Swagger UI for API testing and documentation:
+     ```bash
+     http://localhost:3000/api-docs
+     ```
 
-## API Documentation
+## 📡 API Documentation
 
-- **Authentication Endpoints**:
-  - `/api/login` - Login via email/password
-  - `/api/register` - Register new users
-- **Profile & Address Endpoints**:
-  - `/api/me`: View user's all details
-  - `/api/editProfile`: Edit user's profile
-  - `/api/address`: Get user's addresses
-  - `/api/address`: Edit user's address
-  - `/api/delete/address/:id`: Delete user's address
-- **Product & Category Endpoints**:
-  - `/api/category`: Get all categories
-  - `/api/products`: Get all products
-- **Discount Management**:
-  - `/api/discount`: Get all discounts
-- **Invoice Management**:
-  - `/api/invoices`: Get all invoices
-  - `/api/invoices`: Generate new invoice
-- **Payment Endpoints**:
-  - `/api/checkout`: Process a payment
+### 🔑 Authentication Endpoints
+
+- `POST /api/login` - Log in with email/password
+- `POST /api/register` - Register a new user
+
+### 👤 Profile & Address Endpoints
+
+- `GET /api/me` - Retrieve current user's details
+- `PUT /api/editProfile` - Update user profile information
+- `GET /api/address` - Fetch user addresses
+- `PUT /api/address` - Edit address details
+- `DELETE /api/delete/address/:id` - Delete an address
+
+### 🗂️ Product & Category Endpoints
+
+- `GET /api/category` - Retrieve all categories
+- `GET /api/products` - Retrieve all products
+
+### 🎯 Discount Management Endpoints
+
+- `GET /api/discount` - View available discounts
+
+### 📥 Invoice Management Endpoints
+
+- `GET /api/invoices` - Fetch all invoices
+- `POST /api/invoices` - Generate a new invoice
+
+### 💳 Payment Endpoints
+
+- `POST /api/checkout` - Process payments
+
+## 🏗️ Technologies Used
+
+- **Backend:** Node.js, Express.js
+- **Database:** MySQL with Sequelize ORM
+- **Authentication:** Passport.js (Google, Facebook), JWT
+- **API Documentation:** Swagger UI
+- **Session Management:** Express-session with session-file-store
+
+---
+
+Built with ❤️ by Dhruv Gajera
+
